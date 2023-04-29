@@ -89,7 +89,7 @@ public class CarManager : Singleton<CarManager> {
         CarData newCarData = new CarData();
         newCarData.position = position;
         newCarData.lane = lane;
-        newCarData.cruiseSpeed = DEFAULT_CRUISE_SPEED;
+        newCarData.cruiseSpeed = DEFAULT_CRUISE_SPEED + Random.Range(-10, 10);
         newCarData.velocity = new Vector2(0, newCarData.cruiseSpeed);
         newCarData.gameObject = newObject;
         cars.Add(newCarData);
