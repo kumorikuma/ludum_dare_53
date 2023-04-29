@@ -18,6 +18,7 @@ public class CarData {
     public float cruiseSpeed; // MPH
     public int lane; // TODO: Maybe add decimals for cars between lanes
     public GameObject gameObject;
+    public bool dead;
 }
 
 // Updates car positions
@@ -98,6 +99,16 @@ public class CarManager : Singleton<CarManager> {
     }
 
     public void CarCollision(GameObject carObject) {
-        // TODO stop car and ragdoll
+        var carData = objectToCarData[carObject];
+        if (carData.dead) {
+            return;
+        }
+        // Leave calculations to rigidbody
+        var rb = carObject.GetComponent<Rigidbody>();
+        rb.velocity = carData.velocity;
+
+        // Leave calculations to rigidbody
+        carData.velocity = new Vector2(0, 0);
+        carData.dead = true;
     }
 }

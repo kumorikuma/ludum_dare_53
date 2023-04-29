@@ -75,13 +75,18 @@ public class PlayerController : MonoBehaviour {
     public void OnWalk(bool isWalking) {
     }
 
+    public void OnCollisionEnter(Collision collision) {
+        Debug.Log("Player hit something!");
+    }
+
     void FixedUpdate() {
         // Accelerate / decelerate
+        velocity = rb.velocity;
         if (inputMoveVector.y > 0.1) {
-            velocity.z += Acceleration * Time.deltaTime;
+            velocity.z += Acceleration;
         } else if (inputMoveVector.y < -0.1) {
-            velocity.z -= Acceleration * Time.deltaTime;
-        } else {
+            velocity.z -= Acceleration;
+        } else if (Mathf.Abs(velocity.z - DefaultSpeed) > 0.01) {
             // Decay to default speed
             velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.deltaTime;
         }
@@ -89,12 +94,12 @@ public class PlayerController : MonoBehaviour {
 
         // Move left / right
         if (inputMoveVector.x > 0.1) {
-            velocity.x += SideAcceleration * Time.deltaTime;
+            velocity.x += SideAcceleration;
         } else if (inputMoveVector.x < -0.1) {
-            velocity.x -= SideAcceleration * Time.deltaTime;
-        } else {
+            velocity.x -= SideAcceleration;
+        } else if (Mathf.Abs(velocity.x) > 0.01) {
             // Decay to 0
-            velocity.x -= Mathf.Sign(velocity.x) * SideAcceleration * Time.deltaTime;
+            velocity.x = velocity.x * 0.9f;
         }
         velocity.x = Mathf.Clamp(velocity.x, -MaxSideSpeed, MaxSideSpeed);
 
@@ -107,11 +112,13 @@ public class PlayerController : MonoBehaviour {
         // Gravity
         velocity.y += gravity * Time.deltaTime;
 
-        Debug.Log($"Move {velocity.x}, {velocity.y}, {velocity.z}");
+        rb.velocity = velocity;
 
-        Vector3 newPosition = transform.position + velocity * Time.deltaTime;
-        newPosition.y = Mathf.Max(0, newPosition.y);
-        transform.position = newPosition;
+        // Debug.Log($"Move {velocity.x}, {velocity.y}, {velocity.z}");
+
+        // Vector3 newPosition = transform.position + velocity * Time.deltaTime;
+        // newPosition.y = Mathf.Max(0, newPosition.y);
+        // transform.position = newPosition;
 
         // characterController.Move(velocity * Time.deltaTime);
     }

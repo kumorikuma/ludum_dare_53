@@ -12,11 +12,11 @@ public class CruiseBehavior : StateMachineBehaviour {
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         // Desired speed is the cruising speed of the car
-        GameObject carObj = animator.gameObject;
-        CarData carData = CarManager.Instance.GetCharData(carObj);
-        CarData followingCar = CarManager.Instance.GetCarInFrontOf(carData.position, carData.lane);
+        // GameObject carObj = animator.gameObject;
+        // CarData carData = CarManager.Instance.GetCharData(carObj);
+        // CarData followingCar = CarManager.Instance.GetCarInFrontOf(carData.position, carData.lane);
 
-        float distanceToCar = followingCar.position.y - carData.position.y;
+        // float distanceToCar = followingCar.position.y - carData.position.y;
         // TODO: Implement variable follow distance based on distance and time
     }
 
