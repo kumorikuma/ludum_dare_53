@@ -84,7 +84,7 @@ public class CarManager : Singleton<CarManager> {
         // TODO:
     }
 
-    public void SpawnCar(Vector2 position, int lane) {
+    public void SpawnCar(Vector2 position, int lane, float speed) {
         // Instantiate the game object
         // Debug.Log($"[CarManager] SpawnCar {position}");
         GameObject newObject = (GameObject)Instantiate(CarPrefab, new Vector3(position.x, 0, position.y), Quaternion.identity);
@@ -93,7 +93,7 @@ public class CarManager : Singleton<CarManager> {
         CarData newCarData = new CarData();
         newCarData.position = position;
         newCarData.lane = lane;
-        newCarData.cruiseSpeed = DEFAULT_CRUISE_SPEED + Random.Range(-10, 10);
+        newCarData.cruiseSpeed = speed;
         newCarData.velocity = new Vector2(0, newCarData.cruiseSpeed);
         newCarData.gameObject = newObject;
         cars.Add(newCarData);
