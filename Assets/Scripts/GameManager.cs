@@ -25,6 +25,8 @@ public class GameManager : Singleton<GameManager> {
 
     public void StartLevel() {
         levelStartTime = Time.time;
+
+        LevelManager.Instance.LoadBoTestLevel();
         Debug.Log($"Level Start!");
     }
 
@@ -34,6 +36,7 @@ public class GameManager : Singleton<GameManager> {
 
         // TODO: Show score screen
         Debug.Log($"Level Finished! Time {timespan.ToString(@"hh\:mm\:ss")}");
+        LevelManager.Instance.UnloadCurrentLevel();
     }
 
     public void ScoreCollision(float collisionSpeed) {

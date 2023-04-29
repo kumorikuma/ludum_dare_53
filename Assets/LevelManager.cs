@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Loads different levels
 // Loads parts of levels
@@ -8,7 +9,30 @@ using UnityEngine;
 // Updates car positions
 
 public class LevelManager : Singleton<LevelManager> {
-    void Start() {
+
+    private string currentSceneName = null;
+
+    public void LoadBoTestLevel() {
+        currentSceneName = "BoTestLevel";
+        SceneManager.LoadScene(currentSceneName, LoadSceneMode.Additive);
+        SpawnCars();
+    }
+
+    public void LoadGeneratedLevel() {
+        // TODO generate a level
+    }
+
+    public void UnloadCurrentLevel() {
+        if (currentSceneName == null) {
+            return;
+        }
+        SceneManager.UnloadSceneAsync(currentSceneName);
+        currentSceneName = null;
+
+        // TODO Despawn all cars
+    }
+
+    void SpawnCars() {
         // Test level:
         // 3 lanes
         // Spawn 6 cars
@@ -20,4 +44,5 @@ public class LevelManager : Singleton<LevelManager> {
             }
         }
     }
+
 }
