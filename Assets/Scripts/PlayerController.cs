@@ -76,7 +76,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnCollisionEnter(Collision collision) {
-        Debug.Log("Player hit something!");
+        if (collision.gameObject.CompareTag("Obstacle")) {
+            Debug.Log("Player hit something!");
+            SoundSystem.Instance.PlayClip("crash");
+        }
     }
 
     void FixedUpdate() {
