@@ -45,6 +45,9 @@ public class CarManager : Singleton<CarManager> {
     void FixedUpdate() {
         centroid = Vector3.zero;
         for (int i = 0; i < cars.Count; i++) {
+            if (cars[i].dead) {
+                continue;
+            }
             cars[i].position += cars[i].velocity * Time.fixedDeltaTime;
             cars[i].gameObject.transform.position = new Vector3(cars[i].position.x, 0, cars[i].position.y);
             centroid += cars[i].gameObject.transform.position;

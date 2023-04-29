@@ -83,23 +83,23 @@ public class PlayerController : MonoBehaviour {
         // Accelerate / decelerate
         velocity = rb.velocity;
         if (inputMoveVector.y > 0.1) {
-            velocity.z += Acceleration;
+            velocity.z += Acceleration * Time.fixedDeltaTime;
         } else if (inputMoveVector.y < -0.1) {
-            velocity.z -= Acceleration;
+            velocity.z -= Acceleration * Time.fixedDeltaTime;
         } else if (Mathf.Abs(velocity.z - DefaultSpeed) > 0.01) {
             // Decay to default speed
-            velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.deltaTime;
+            velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.fixedDeltaTime;
         }
         velocity.z = Mathf.Clamp(velocity.z, MinSpeed, MaxSpeed);
 
         // Move left / right
         if (inputMoveVector.x > 0.1) {
-            velocity.x += SideAcceleration;
+            velocity.x += SideAcceleration * Time.fixedDeltaTime;
         } else if (inputMoveVector.x < -0.1) {
-            velocity.x -= SideAcceleration;
+            velocity.x -= SideAcceleration * Time.fixedDeltaTime;
         } else if (Mathf.Abs(velocity.x) > 0.01) {
             // Decay to 0
-            velocity.x = velocity.x * 0.9f;
+            velocity.x = velocity.x * 0.9f * Time.fixedDeltaTime;
         }
         velocity.x = Mathf.Clamp(velocity.x, -MaxSideSpeed, MaxSideSpeed);
 
@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         // Gravity
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += gravity * Time.fixedDeltaTime;
 
         rb.velocity = velocity;
 
