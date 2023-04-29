@@ -26,7 +26,7 @@ public class InputManager : MonoBehaviour {
         // Main difference with gamepads is that diagonal movement is difficult to capture,
         // since they can be a series of horizontal/vertical deltas.
         // There can also be a movement with a really large delta, whereas gamepad is capped out.
-        PlayerManager.Instance.CameraController.OnLook(value.Get<Vector2>() * MouseLookSensitivity);
+        // PlayerManager.Instance.CameraController.OnLook(value.Get<Vector2>() * MouseLookSensitivity);
     }
     void OnPause() {
         MenuSystem.Instance.PauseGame();

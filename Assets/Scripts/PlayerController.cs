@@ -15,22 +15,30 @@ public class PlayerController : MonoBehaviour {
         public AudioClip[] footstepSounds;
     }
 
-    [Header("Movement")]
-    [Tooltip("Walking controller speed")]
+    [Header("Forward Acceleration")]
+    [Tooltip("Acceleration")]
     [SerializeField]
-    private float WalkSpeed = 1.0f;
+    private float Acceleration = 0.1f;
 
-    [Tooltip("Normal controller speed")]
+    [Tooltip("Side acceleration")]
     [SerializeField]
-    private float RunSpeed = 3.0f;
-
-    [Tooltip("Turning controller speed")]
-    [SerializeField]
-    private float TurnSpeed = 360.0f;
+    private float SideAcceleration = 1.0f;
 
     [Tooltip("Force of the jump with which the controller rushes upwards")]
     [SerializeField]
     private float JumpForce = 1.0f;
+
+    [SerializeField]
+    private float DefaultSpeed = 0.0f;
+
+    [SerializeField]
+    private float MaxSpeed = 40.0f;
+
+    [SerializeField]
+    private float MinSpeed = -10.0f;
+
+    [SerializeField]
+    private float MaxSideSpeed = 20.0f;
 
     [Tooltip("Gravity, pushing down controller when it jumping")]
     [SerializeField]
@@ -39,22 +47,23 @@ public class PlayerController : MonoBehaviour {
     public GameObject PlayerModel;
 
     //Private movement variables
-    private Vector3 inputMoveVector;
-    private bool inputJumpOnNextFrame = false;
-    private Vector3 _velocity; // Used for handling jumping
+    private Rigidbody rb;
     private CharacterController characterController;
-    private bool isWalkKeyHeld = false;
-    Quaternion targetRotation;
+
+    private Vector2 inputMoveVector;
+    private bool inputJumpOnNextFrame = false;
+    private Vector3 velocity;  // velocity relative to player: +x = right, +y = up, +z = forward
+
 
     private void Awake() {
+        rb = GetComponent<Rigidbody>();
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        _velocity.y = -2f;
     }
 
     public void OnMove(Vector2 moveVector) {
-        inputMoveVector = new Vector3(moveVector.x, 0, moveVector.y);
+        inputMoveVector = moveVector;
     }
 
     public void OnJump() {
@@ -64,45 +73,47 @@ public class PlayerController : MonoBehaviour {
 
     // Using KBM controls, there's a specific button to walk.
     public void OnWalk(bool isWalking) {
-        isWalkKeyHeld = isWalking;
     }
 
-    private void Update() {
-        Movement();
-    }
-
-    //Character controller movement
-    private void Movement() {
-        if (inputJumpOnNextFrame && characterController.isGrounded) {
-            _velocity.y = Mathf.Sqrt(JumpForce * -2f * gravity);
+    void FixedUpdate() {
+        // Accelerate / decelerate
+        if (inputMoveVector.y > 0.1) {
+            velocity.z += Acceleration * Time.deltaTime;
+        } else if (inputMoveVector.y < -0.1) {
+            velocity.z -= Acceleration * Time.deltaTime;
+        } else {
+            // Decay to default speed
+            velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.deltaTime;
         }
-        inputJumpOnNextFrame = false;
+        velocity.z = Mathf.Clamp(velocity.z, MinSpeed, MaxSpeed);
 
-        // Using KBM controls, there's a specific button to walk.
-        // Otherwise, use the amount that user is pushing stick.
-        bool isWalking = isWalkKeyHeld || inputMoveVector.magnitude < 0.5f;
-        float moveSpeed = isWalking ? WalkSpeed : RunSpeed;
-        // Character should move in the direction of the camera
-        Vector3 worldMoveDirection = PlayerManager.Instance.CameraController.Pivot.transform.rotation * inputMoveVector;
-        // Y component should be 0
-        worldMoveDirection.y = 0;
-        worldMoveDirection = worldMoveDirection.normalized;
-        Vector3 absoluteMoveVector = worldMoveDirection * moveSpeed * Time.deltaTime;
-        bool isMoving = absoluteMoveVector.magnitude > 0;
-        float forwardSpeed = isMoving ? moveSpeed : 0;
-        if (isMoving) {
-            // Face the character in the direction of movement
-            targetRotation = Quaternion.Euler(0, Mathf.Atan2(worldMoveDirection.x, worldMoveDirection.z) * Mathf.Rad2Deg, 0);
+        // Move left / right
+        if (inputMoveVector.x > 0.1) {
+            velocity.x += SideAcceleration * Time.deltaTime;
+        } else if (inputMoveVector.x < -0.1) {
+            velocity.x -= SideAcceleration * Time.deltaTime;
+        } else {
+            // Decay to 0
+            velocity.x -= Mathf.Sign(velocity.x) * SideAcceleration * Time.deltaTime;
+        }
+        velocity.x = Mathf.Clamp(velocity.x, -MaxSideSpeed, MaxSideSpeed);
+
+        // Jump
+        if (inputJumpOnNextFrame) {
+            velocity.y = JumpForce;
+            inputJumpOnNextFrame = false;
         }
 
-        // Turn the player incrementally towards the direction of movement
-        PlayerModel.transform.rotation = Quaternion.RotateTowards(PlayerModel.transform.rotation, targetRotation, TurnSpeed * Time.deltaTime);
+        // Gravity
+        velocity.y += gravity * Time.deltaTime;
 
-        // CharacterController.Move should only be called once, see:
-        // https://forum.unity.com/threads/charactercontroller-isgrounded-unreliable-or-bad-code.373492/
-        characterController.Move(_velocity * Time.deltaTime + absoluteMoveVector);
+        Debug.Log($"Move {velocity.x}, {velocity.y}, {velocity.z}");
 
-        // Update velocity from gravity
-        _velocity.y += gravity * Time.deltaTime;
+        Vector3 newPosition = transform.position + velocity * Time.deltaTime;
+        newPosition.y = Mathf.Max(0, newPosition.y);
+        transform.position = newPosition;
+
+        // characterController.Move(velocity * Time.deltaTime);
     }
+
 }
