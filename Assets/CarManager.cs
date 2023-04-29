@@ -96,4 +96,8 @@ public class CarManager : Singleton<CarManager> {
 
         objectToCarData[newCarData.gameObject] = newCarData;
     }
+
+    public void CarCollision(GameObject carObject) {
+        // TODO stop car and ragdoll
+    }
 }
