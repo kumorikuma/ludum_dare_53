@@ -27,6 +27,7 @@ public class TileManager : Singleton<TileManager> {
     }
 
     public void LoadLevel(LevelData level) {
+        currentTile = 0;
         currentLevel = level;
         maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 1;
 

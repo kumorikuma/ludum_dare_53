@@ -10,10 +10,8 @@ type Message = {
 
 let conversations = new Map<string, Message[]>();
 conversations["level1"] = [
-    { speaker: "Handler", text: "You're already on the road? Good." },
     { speaker: "Handler", text: "This package is of utmost importance. You have 3 minutes to get it to the president." },
     { speaker: "Agent", text: "3 Minutes?!" },
-    { speaker: "Handler", text: "Exactly. So better go fast." },
 ];
 conversations["level2"] = [
     { speaker: "Handler", text: "By the way, there appears to be a pandemic going around." },
@@ -28,10 +26,10 @@ export default function Dialogue(): React.ReactNode {
 
     const currentConversation = conversations[conversationKey];
     const currentMessage = currentConversation ? currentConversation[index] : null;
+    const hasNext = currentConversation && currentConversation.length > index + 1;
 
     const handleNext = () => {
         // Advance conversation or call DialogueFinished
-        const hasNext = currentConversation && currentConversation.length > index + 1;
         if (hasNext) {
             setIndex(index + 1);
         } else {
@@ -46,7 +44,7 @@ export default function Dialogue(): React.ReactNode {
             <p className="message">{currentMessage ? currentMessage.text : ""}</p>
         </view>
         <button onClick={() => handleNext()}>
-            CONTINUE
+            {hasNext ? "CONTINUE" : "START"}
         </button>
     </view>;
 }
