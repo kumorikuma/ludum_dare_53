@@ -17,14 +17,22 @@ public class GameManager : Singleton<GameManager> {
     // Level stats
     private float levelStartTime;
     private float levelFinishTime;
-    private int damage;
+    private int damages;
 
     void Start() {
         StartLevel();
     }
 
+    void Update() {
+        var timespan = TimeSpan.FromSeconds(Time.time - levelStartTime);
+        ReactUnityBridge.Instance.UpdateTimer($"Time: {timespan.ToString(@"hh\:mm\:ss")}");
+    }
+
     public void StartLevel() {
         levelStartTime = Time.time;
+        damages = 0;
+
+        ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
 
         LevelManager.Instance.LoadBoTestLevel();
         Debug.Log($"Level Start!");
@@ -40,7 +48,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void ScoreCollision(float collisionSpeed) {
-        damage += 1 + (int)collisionSpeed;
-        Debug.Log($"Collision! Damage {damage}");
+        damages += 1 + (int)collisionSpeed;
+        ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
     }
 }

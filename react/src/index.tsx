@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 
 import Menu from './menu';
 import Dialogue from './dialogue';
+import Game from './game';
 
 export default function App() {
   const globals = useGlobals();
@@ -24,6 +25,7 @@ export default function App() {
       <Route path="/" element={<view />} />
       <Route path="/menu" element={<Menu />} />
       <Route path="/dialogue" element={<Dialogue />} />
+      <Route path="/game" element={<Game />} />
     </Routes>
   );
 }

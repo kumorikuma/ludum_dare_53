@@ -32,6 +32,9 @@ public class UIRouter : Singleton<UIRouter> {
             case Route.Dialogue:
                 routePath = "/dialogue";
                 break;
+            case Route.Game:
+                routePath = "/game";
+                break;
         }
         return routePath;
     }

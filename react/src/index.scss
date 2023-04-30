@@ -75,3 +75,29 @@
     background-color: rgba(0, 0, 0, 0.8);
   }
 }
+
+.game-hud {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .rule {
+    height: 1px;
+    align-self: stretch;
+    margin: 0px 0;
+  }
+
+  .top-bar {
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .content {
+    flex-grow: 1;
+  }
+
+  .bottom-bar {
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}

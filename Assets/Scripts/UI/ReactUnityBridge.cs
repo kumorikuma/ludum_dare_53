@@ -4,7 +4,7 @@ using ReactUnity;
 using ReactUnity.Reactive;
 using UnityEngine;
 
-public class ReactUnityBridge : MonoBehaviour {
+public class ReactUnityBridge : Singleton<ReactUnityBridge> {
     [NonNullField]
     public UIRouter Router;
 
@@ -18,7 +18,12 @@ public class ReactUnityBridge : MonoBehaviour {
     // TODO: This requires less code, but not sure how to type it on JS side.
     public ReactiveValue<DialogueData> dialogueData = new ReactiveValue<DialogueData>();
 
-    void Awake() {
+    // HUD texts
+    public ReactiveValue<string> timerText = new ReactiveValue<string>();
+    public ReactiveValue<string> damagesText = new ReactiveValue<string>();
+
+    protected override void Awake() {
+        base.Awake();
         ReactRendererBase reactRenderer = GetComponentInChildren<ReactUnity.UGUI.ReactRendererUGUI>();
         Router.OnRouteUpdate += OnRouteUpdate;
         reactRenderer.Globals["route"] = route;
@@ -28,6 +33,10 @@ public class ReactUnityBridge : MonoBehaviour {
         reactRenderer.Globals["dialogueSpeaker"] = dialogueSpeaker;
         reactRenderer.Globals["dialogueText"] = dialogueText;
         reactRenderer.Globals["dialogueData"] = dialogueData;
+
+        reactRenderer.Globals["timerText"] = timerText;
+        reactRenderer.Globals["damagesText"] = damagesText;
+
     }
 
     void OnRouteUpdate(object sender, string data) {
@@ -40,4 +49,13 @@ public class ReactUnityBridge : MonoBehaviour {
         dialogueText.Value = data.text;
         // dialogueData.Value = data;
     }
+
+    public void UpdateTimer(string text) {
+        timerText.Value = text;
+    }
+
+    public void UpdateDamages(string text) {
+        damagesText.Value = text;
+    }
+
 }
