@@ -20,10 +20,14 @@ public class GameManager : Singleton<GameManager> {
     private int damages;
 
     void Start() {
-        StartLevel();
+        ShowTitle();
     }
 
     void Update() {
+        if (LevelManager.Instance.CurrentLevel == null) {
+            return;
+        }
+
         var timespan = TimeSpan.FromSeconds(Time.time - levelStartTime);
         ReactUnityBridge.Instance.UpdateTimer($"Time: {timespan.ToString(@"hh\:mm\:ss")}");
 
@@ -38,6 +42,15 @@ public class GameManager : Singleton<GameManager> {
         }
     }
 
+    public void ShowTitle() {
+        LevelManager.Instance.LoadLevel(0);
+        MenuSystem.Instance.ShowTitle();
+    }
+
+    public void StartGame() {
+        MenuSystem.Instance.ShowDialogue("level1");
+    }
+
     public void StartLevel() {
         levelStartTime = Time.time;
         damages = 0;
@@ -45,8 +58,11 @@ public class GameManager : Singleton<GameManager> {
         ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
 
         // LevelManager.Instance.LoadBoTestLevel();
-        LevelManager.Instance.LoadLevel(0);
+        LevelManager.Instance.LoadLevel(1);
         Debug.Log($"Level Start!");
+
+        PlayerManager.Instance.SwitchActionMaps("gameplay");
+        UIRouter.Instance.SwitchRoutes(UIRouter.Route.Game);
     }
 
     public void FinishLevel() {

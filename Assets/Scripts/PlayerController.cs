@@ -62,8 +62,8 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         characterController = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
     }
 
     public void OnMove(Vector2 moveVector) {

@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class UIRouter : Singleton<UIRouter> {
     public enum Route {
+        Title,
+        Pause,
+        LevelStart,
+        LevelEnd,
         Game,
-        Menu,
         Dialogue,
     }
 
@@ -26,14 +29,23 @@ public class UIRouter : Singleton<UIRouter> {
     string RouteNameToPath(Route routeName) {
         string routePath = "";
         switch (routeName) {
-            case Route.Menu:
-                routePath = "/menu";
+            case Route.Title:
+                routePath = "/title";
+                break;
+            case Route.Pause:
+                routePath = "/pause";
+                break;
+            case Route.LevelStart:
+                routePath = "/level_start";
+                break;
+            case Route.LevelEnd:
+                routePath = "/level_end";
+                break;
+            case Route.Game:
+                routePath = "/hud";
                 break;
             case Route.Dialogue:
                 routePath = "/dialogue";
-                break;
-            case Route.Game:
-                routePath = "/game";
                 break;
         }
         return routePath;

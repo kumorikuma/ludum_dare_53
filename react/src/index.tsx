@@ -5,9 +5,12 @@ import './index.scss';
 import { MemoryRouter, Route, Routes, useNavigate } from 'react-router';
 import { useEffect } from 'react';
 
-import Menu from './menu';
+import Title from './title';
+import Pause from './pause';
+import LevelStart from './level_start';
+import LevelEnd from './level_end';
+import Hud from './hud';
 import Dialogue from './dialogue';
-import Game from './game';
 
 export default function App() {
   const globals = useGlobals();
@@ -23,9 +26,12 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<view />} />
-      <Route path="/menu" element={<Menu />} />
+      <Route path="/title" element={<Title />} />
+      <Route path="/pause" element={<Pause />} />
+      <Route path="/level_start" element={<LevelStart />} />
+      <Route path="/level_end" element={<LevelEnd />} />
+      <Route path="/hud" element={<Hud />} />
       <Route path="/dialogue" element={<Dialogue />} />
-      <Route path="/game" element={<Game />} />
     </Routes>
   );
 }

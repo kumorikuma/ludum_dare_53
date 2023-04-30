@@ -10,13 +10,8 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
 
     public ReactiveValue<string> route = new ReactiveValue<string>();
 
-    // Sample usage
-    [NonNullField]
-    public DialogueSystem DialogueSystem;
-    public ReactiveValue<string> dialogueSpeaker = new ReactiveValue<string>();
-    public ReactiveValue<string> dialogueText = new ReactiveValue<string>();
-    // TODO: This requires less code, but not sure how to type it on JS side.
-    public ReactiveValue<DialogueData> dialogueData = new ReactiveValue<DialogueData>();
+    // Conversation
+    public ReactiveValue<string> conversationKey = new ReactiveValue<string>();
 
     // HUD texts
     public ReactiveValue<string> timerText = new ReactiveValue<string>();
@@ -28,26 +23,21 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
         Router.OnRouteUpdate += OnRouteUpdate;
         reactRenderer.Globals["route"] = route;
 
-        // Sample usage
-        DialogueSystem.OnDialogueUpdate += OnDialogueUpdate;
-        reactRenderer.Globals["dialogueSpeaker"] = dialogueSpeaker;
-        reactRenderer.Globals["dialogueText"] = dialogueText;
-        reactRenderer.Globals["dialogueData"] = dialogueData;
+        // Dialog
+        reactRenderer.Globals["conversationKey"] = conversationKey;
 
+        // HUD
         reactRenderer.Globals["timerText"] = timerText;
         reactRenderer.Globals["damagesText"] = damagesText;
+
+        // Scores
+
+        // Upgrades
 
     }
 
     void OnRouteUpdate(object sender, string data) {
         route.Value = data;
-    }
-
-    // Sample usage
-    void OnDialogueUpdate(object sender, DialogueData data) {
-        dialogueSpeaker.Value = data.speaker;
-        dialogueText.Value = data.text;
-        // dialogueData.Value = data;
     }
 
     public void UpdateTimer(string text) {
@@ -56,6 +46,19 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
 
     public void UpdateDamages(string text) {
         damagesText.Value = text;
+    }
+
+    public static void StartGameClicked() {
+        GameManager.Instance.StartGame();
+    }
+
+    public static void DialogueFinished() {
+        Debug.Log("DialogueFinished");
+        GameManager.Instance.StartLevel();
+    }
+
+    public static void TestDebug() {
+        Debug.Log("Interop Test Works");
     }
 
 }

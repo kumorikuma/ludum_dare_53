@@ -16,6 +16,9 @@ public class TileManager : Singleton<TileManager> {
     private Queue<GameObject> loadedTiles = new Queue<GameObject>();
 
     void Update() {
+        if (currentLevel == null) {
+            return;
+        }
         invisibleWallsObject.transform.position = new Vector3(
             invisibleWallsObject.transform.position.x,
             invisibleWallsObject.transform.position.y,

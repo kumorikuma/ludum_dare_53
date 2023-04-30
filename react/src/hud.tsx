@@ -2,7 +2,7 @@ import { useGlobals, useReactiveValue } from '@reactunity/renderer';
 
 import './index.scss';
 
-export default function Game(): React.ReactNode {
+export default function Hud(): React.ReactNode {
     const globals = useGlobals();
     const timerText = useReactiveValue(globals.timerText);
     const damagesText = useReactiveValue(globals.damagesText);
