@@ -40,8 +40,6 @@ public class CarManager : Singleton<CarManager> {
 
     private Vector3 centroid;
 
-    public GameObject FollowCam;
-
     void FixedUpdate() {
         centroid = Vector3.zero;
         for (int i = 0; i < cars.Count; i++) {
@@ -52,9 +50,8 @@ public class CarManager : Singleton<CarManager> {
             cars[i].gameObject.transform.position = new Vector3(cars[i].position.x, 0, cars[i].position.y);
             centroid += cars[i].gameObject.transform.position;
         }
-        centroid = centroid / cars.Count;
-        if (FollowCam) {
-            FollowCam.transform.position = centroid;
+        if (cars.Count > 0) {
+            centroid = centroid / cars.Count;
         }
     }
 

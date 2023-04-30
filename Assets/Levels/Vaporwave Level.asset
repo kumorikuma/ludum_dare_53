@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d6197adafd34fe42a125837eac9a398, type: 3}
+  m_Name: Vaporwave Level
+  m_EditorClassIdentifier: 
+  Name: Vaporwave
+  LevelLengthMeters: 1600
+  OncomingTrafficLanes: 2
+  FollowingTrafficLanes: 2
+  LaneSize: 3.7
+  TileSize: 400
+  Tiles:
+  - {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
+  - {fileID: 3346203251014832160, guid: c2f964a5a14acc542af36977569ee997, type: 3}
+  - {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
+  - {fileID: 3346203251014832160, guid: c2f964a5a14acc542af36977569ee997, type: 3}
+  - {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
+  - {fileID: 3346203251014832160, guid: c2f964a5a14acc542af36977569ee997, type: 3}

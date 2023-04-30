@@ -26,6 +26,16 @@ public class GameManager : Singleton<GameManager> {
     void Update() {
         var timespan = TimeSpan.FromSeconds(Time.time - levelStartTime);
         ReactUnityBridge.Instance.UpdateTimer($"Time: {timespan.ToString(@"hh\:mm\:ss")}");
+
+        // TODO: Instead of having an end-zone, check if game is over by y position of player?
+        // Ideally we could have a cutscene at the end, maybe like a building where can pull off to deliver.
+        // TODO: Can also give player a distance meter, maybe at the top of the screen
+        float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
+        float progressPct = Math.Clamp(playerPosition / LevelManager.Instance.CurrentLevel.LevelLengthMeters, 0, 1);
+        Debug.Log(progressPct);
+        if (progressPct >= 1) {
+            FinishLevel();
+        }
     }
 
     public void StartLevel() {
@@ -34,7 +44,8 @@ public class GameManager : Singleton<GameManager> {
 
         ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
 
-        LevelManager.Instance.LoadBoTestLevel();
+        // LevelManager.Instance.LoadBoTestLevel();
+        LevelManager.Instance.LoadLevel(0);
         Debug.Log($"Level Start!");
     }
 
@@ -44,7 +55,7 @@ public class GameManager : Singleton<GameManager> {
 
         // TODO: Show score screen
         Debug.Log($"Level Finished! Time {timespan.ToString(@"hh\:mm\:ss")}");
-        LevelManager.Instance.UnloadCurrentLevel();
+        // LevelManager.Instance.UnloadCurrentLevel();
     }
 
     public void ScoreCollision(float collisionSpeed) {
