@@ -420,9 +420,8 @@ GameObject:
   - component: {fileID: 1525870571400836338}
   - component: {fileID: 1525870571400836349}
   - component: {fileID: 1525870571400836348}
-  - component: {fileID: 1525870571400836339}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Skyplane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -493,20 +492,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1525870571400836339
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525870571400836337}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2603421068235396117
 GameObject:
   m_ObjectHideFlags: 0

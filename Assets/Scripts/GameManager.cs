@@ -32,7 +32,7 @@ public class GameManager : Singleton<GameManager> {
         // TODO: Can also give player a distance meter, maybe at the top of the screen
         float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
         float progressPct = Math.Clamp(playerPosition / LevelManager.Instance.CurrentLevel.LevelLengthMeters, 0, 1);
-        Debug.Log(progressPct);
+        // Debug.Log(progressPct);
         if (progressPct >= 1) {
             FinishLevel();
         }

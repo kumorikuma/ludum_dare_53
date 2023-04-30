@@ -54,6 +54,10 @@ public class PlayerController : MonoBehaviour {
     private bool inputJumpOnNextFrame = false;
     private Vector3 velocity;  // velocity relative to player: +x = right, +y = up, +z = forward
 
+    public float GetPlayerSpeed() {
+        return velocity.z;
+    }
+
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
