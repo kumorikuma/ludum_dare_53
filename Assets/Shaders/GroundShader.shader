@@ -16,7 +16,15 @@ Shader "Unlit/GroundShader"
         _LightVector("Directional Light Vector", Vector) = (0, -1, -1)
         _KeyLightBrightness("Key Light Brightness", Range(0, 1)) = 0.3
         _ClearingLocation("Clearing Location", float) = 50
+        _ClearingXOffset("Clearing X Offset", Range(0, 50)) = 10
+        _ClearingScaleX("Clearing Scale X", Range(0, 1)) = 0.55
+        _ClearingScaleY("Clearing Scale Y", Range(0, 1)) = 0.3
+        _ClearingLocationSize("Clearing Location Size", Range(0, 30)) = 10
+        _ClearingBlendWidth("Clearing Blend Width", Range(0, 30)) = 5
         [Toggle(USE_CLEARING)] _HasClearingLocation("Has Clearing", Float) = 1
+        [Toggle(FLIP_V)] _FlipV("Flip V", Float) = 0
+        [Toggle(FADE_OUT_HEIGHTMAP)] _FadeoutHeightmap("Fadeout Heightmap", Float) = 0
+        [Toggle(FLIP_FADE)] _FlipFade("Flip Fade", Float) = 0
         // InnerRadius where heightmap = 0
         // OuterRadius where (OuterRadius - InnerRadius) = Blend
         _BgGridDensity ("Bg Grid Density", Range(1, 100)) = 40
@@ -31,6 +39,9 @@ Shader "Unlit/GroundShader"
         {
             CGPROGRAM
             #pragma shader_feature USE_CLEARING
+            #pragma shader_feature FLIP_V
+            #pragma shader_feature FADE_OUT_HEIGHTMAP
+            #pragma shader_feature FLIP_FADE
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
@@ -96,11 +107,19 @@ Shader "Unlit/GroundShader"
             float _BgGridThickness;
 
             float _ClearingLocation;
+            float _ClearingXOffset;
+            float _ClearingScaleX;
+            float _ClearingScaleY;
+            float _ClearingLocationSize;
+            float _ClearingBlendWidth;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                #ifdef FLIP_V
+                    o.uv = float2(o.uv.x, 1 - o.uv.y);
+                #endif
 
                 // If worldspace position is between [-roadWidth / 2, roadWidth / 2], we're on the road
                 o.posWorldSpace = mul(unity_ObjectToWorld, v.vertex).xyz;
@@ -115,17 +134,25 @@ Shader "Unlit/GroundShader"
 
                 #ifdef USE_CLEARING
                     float2 worldPos = float2(o.posWorldSpace.xz);
-                    float2 clearingPos = float2(halfRoadWidth + 10, _ClearingLocation);
-                    float2 distanceToClearingXY = abs(clearingPos - worldPos) * float2(0.55, 0.3); // Multiply distance in one axis to change the shape
-                    o.distanceToClearing = smoothstep(10, 15, length(distanceToClearingXY));
-                    o.heightMultiplier = o.distanceToRoad * o.distanceToClearing;
+                    float2 clearingPos = float2(halfRoadWidth + _ClearingXOffset, _ClearingLocation);
+                    float2 distanceToClearingXY = abs(clearingPos - worldPos) * float2(_ClearingScaleX, _ClearingScaleY); // Multiply distance in one axis to change the shape
+                    o.distanceToClearing = smoothstep(_ClearingLocationSize, _ClearingLocationSize + _ClearingBlendWidth, length(distanceToClearingXY));
+                    o.heightMultiplier = _HeightScale * o.distanceToRoad * o.distanceToClearing;
                 #else
                     o.distanceToClearing = 0;
-                    o.heightMultiplier = o.distanceToRoad;
+                    o.heightMultiplier = _HeightScale * o.distanceToRoad;
+                #endif
+
+                #ifdef FADE_OUT_HEIGHTMAP
+                    #ifdef FLIP_FADE
+                        o.heightMultiplier = lerp(o.heightMultiplier, 0, 1 - v.uv.y);
+                    #else
+                        o.heightMultiplier = lerp(o.heightMultiplier, 0, v.uv.y);
+                    #endif
                 #endif
             
                 float heightSample = tex2Dlod(_MainTex, float4(o.uv, 0, 0)).r + _HeightOffset; // [0, 1] -> [-1, 1]
-                o.height = heightSample * _HeightScale * o.heightMultiplier;
+                o.height = heightSample * o.heightMultiplier;
                 if ((o.posWorldSpace.x < -halfRoadWidth || o.posWorldSpace.x > halfRoadWidth) && heightSample > 0) {
                     v.vertex.y = v.vertex.y + o.height;
                 }
@@ -199,9 +226,15 @@ Shader "Unlit/GroundShader"
                     float height = tex2D(_MainTex, i.uv).r;
                     float heightL = tex2D(_MainTex, i.uv + float2(-texelSize.x, 0)).r;
                     float heightR = tex2D(_MainTex, i.uv + float2(texelSize.x, 0)).r;
-                    float heightB = tex2D(_MainTex, i.uv + float2(0, -texelSize.y)).r;
-                    float heightT = tex2D(_MainTex, i.uv + float2(0, texelSize.y)).r;
-                    float3 N = computeNormals(heightT, heightR, heightB, heightL, height, _HeightScale * i.heightMultiplier);
+                    #ifdef FLIP_V
+                        float heightB = tex2D(_MainTex, i.uv + float2(0, texelSize.y)).r;
+                        float heightT = tex2D(_MainTex, i.uv + float2(0, -texelSize.y)).r;
+
+                    #else
+                        float heightB = tex2D(_MainTex, i.uv + float2(0, -texelSize.y)).r;
+                        float heightT = tex2D(_MainTex, i.uv + float2(0, texelSize.y)).r;
+                    #endif
+                    float3 N = computeNormals(heightT, heightR, heightB, heightL, height, i.heightMultiplier);
 
                     float3 L = -normalize(_LightVector);
                     float NdotL = clamp(dot(N, L), 0, 1);

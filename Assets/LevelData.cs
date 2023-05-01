@@ -15,7 +15,11 @@ public class LevelData : ScriptableObject {
 
     public float LaneSize;
     public int TileSize;
-    public List<GameObject> Tiles;
+    public GameObject EntryTile;
+    public List<GameObject> LevelTiles;
+    public GameObject ExitTile;
+    public GameObject StopTile;
+    public GameObject TransitionTile;
     public List<float> DeliveryLocations; // Values should be between [0, LevelLengthMeters]
 
     public List<int> GetLaneDirections() {

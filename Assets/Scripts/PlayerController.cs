@@ -67,6 +67,18 @@ public class PlayerController : MonoBehaviour {
         return velocity.z;
     }
 
+    // Continue on current path to ZPos.
+    // Disable user control.
+    // Callback when done.
+    public void DriveToZPos() {
+
+    }
+
+    // Turn towards position and drive towards it
+    public void DriveToPosition() {
+
+    }
+
     public void Reset() {
         var position = transform.position;
         position.z = 0;

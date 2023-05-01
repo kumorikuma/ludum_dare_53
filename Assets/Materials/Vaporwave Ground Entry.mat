@@ -7,10 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Vaporwave Ground
+  m_Name: Vaporwave Ground Entry
   m_Shader: {fileID: 4800000, guid: 89927192568189d41a36296c68b32b73, type: 3}
   m_ValidKeywords:
-  - USE_CLEARING
+  - FADE_OUT_HEIGHTMAP
+  - FLIP_FADE
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -63,7 +64,7 @@ Material:
     - _BgGridThickness: 0.01
     - _BumpScale: 1
     - _ClearingBlendWidth: 5
-    - _ClearingLocation: -50
+    - _ClearingLocation: 50
     - _ClearingLocationSize: 10
     - _ClearingScaleX: 0.55
     - _ClearingScaleY: 0.3
@@ -71,14 +72,15 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FadeoutHeightmap: 0
+    - _FadeoutHeightmap: 1
+    - _FlipFade: 1
     - _FlipV: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _GridCells: 4
     - _GridThickness: 0.01
-    - _HasClearingLocation: 1
+    - _HasClearingLocation: 0
     - _HeightOffset: -0.2
     - _HeightRoadBlend: 15
     - _HeightScale: 40

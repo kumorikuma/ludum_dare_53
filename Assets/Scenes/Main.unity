@@ -342,6 +342,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 961783}
     m_Modifications:
+    - target: {fileID: 1976600809, guid: b06f3cf3474de2249b9403f776fa7a5e, type: 3}
+      propertyPath: MaxViewDistance
+      value: 800
+      objectReference: {fileID: 0}
     - target: {fileID: 358638036469852621, guid: b06f3cf3474de2249b9403f776fa7a5e, type: 3}
       propertyPath: m_Name
       value: Level System
