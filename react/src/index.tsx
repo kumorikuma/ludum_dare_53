@@ -19,7 +19,7 @@ export default function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(`Navigate to route: ${route}`);
+    // console.log(`Navigate to route: ${route}`);
     navigate(route);
   }, [route, navigate])
 

@@ -33,7 +33,7 @@ public class SoundSystem : Singleton<SoundSystem> {
     // Private fields
     private Dictionary<string, AudioClip> clips;
 
-    void OnValidate() {
+    void Start() {
         // Move sounds from the array into a hashmap
         clips = new Dictionary<string, AudioClip>();
         foreach (var clip in audioClips) {
