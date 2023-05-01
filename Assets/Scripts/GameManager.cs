@@ -27,6 +27,7 @@ public class GameManager : Singleton<GameManager> {
     private float timeLimit;
     private int damages;
     private int deliveries;
+    private float levelStartPosition = 0f;
     private float distanceTravelledThisLevel = 0f;
 
     // Others
@@ -62,7 +63,10 @@ public class GameManager : Singleton<GameManager> {
             }
         }
 
-        distanceTravelledThisLevel = Mathf.Max(0f, playerPosition - LevelManager.Instance.GetLevelOffset());
+        // Fake distance travelled to account for offset
+        var actualLevelLength = (LevelManager.Instance.GetEndPosition() - levelStartPosition);
+        var actualDistanceTravelled = playerPosition - levelStartPosition;
+        distanceTravelledThisLevel = actualDistanceTravelled / actualLevelLength * LevelManager.Instance.CurrentLevel.GetLevelLengthMeters();
 
         UpdateSunset();
         UpdateHud();
@@ -84,6 +88,7 @@ public class GameManager : Singleton<GameManager> {
         levelIndex += 1;
         levelStartTime = Time.time;
         damages = 0;
+        levelStartPosition = PlayerManager.Instance.PlayerController.transform.position.z;
         distanceTravelledThisLevel = 0f;
 
         // LevelManager.Instance.LoadBoTestLevel();
@@ -145,7 +150,6 @@ public class GameManager : Singleton<GameManager> {
     }
 
     private void UpdateHud() {
-        Debug.Log($"distanceTravelled {distanceTravelled} distanceTravelledThisLevel {distanceTravelledThisLevel}");
         ReactUnityBridge.Instance.UpdateHud(timeRemaining, money, distanceTravelled + distanceTravelledThisLevel, totalDistance);
     }
 

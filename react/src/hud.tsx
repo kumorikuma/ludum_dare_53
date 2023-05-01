@@ -21,8 +21,8 @@ export default function Hud(): React.ReactNode {
                 <h1>{timerText}</h1>
             </div>
             <div className="right">
-                <h3>DISTANCE TO DESTINATION</h3>
-                <h2>{`${distanceKm.toFixed(2)}km`}</h2>
+                <h3>TO DESTINATION</h3>
+                <h2>{`${distanceKm.toFixed(1)} KM`}</h2>
             </div>
         </view>
         <view className="content">
