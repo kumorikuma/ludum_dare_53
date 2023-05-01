@@ -34,6 +34,7 @@ public class SoundSystem : Singleton<SoundSystem> {
 
     // Private fields
     private Dictionary<string, AudioClip> clips;
+    private float overallVolume = 1.0f;
 
     void Start() {
         // Move sounds from the array into a hashmap
@@ -62,8 +63,14 @@ public class SoundSystem : Singleton<SoundSystem> {
     }
 
     public void SetEngineLevel(float level) {
-        engineAudioSource.pitch = minEnginePitch + level * (maxEnginePitch - minEnginePitch);
-        engineAudioSource.volume = minEngineVolume + level * (maxEngineVolume - minEngineVolume);
+        engineAudioSource.pitch = overallVolume * (minEnginePitch + level * (maxEnginePitch - minEnginePitch));
+        engineAudioSource.volume = overallVolume * (minEngineVolume + level * (maxEngineVolume - minEngineVolume));
     }
 
+    public void SetVolume(float level) {
+        overallVolume = level;
+        sfxAudioSource.volume = overallVolume;
+        engineAudioSource.volume = overallVolume;
+        levelMusicSource.volume = overallVolume;
+    }
 }

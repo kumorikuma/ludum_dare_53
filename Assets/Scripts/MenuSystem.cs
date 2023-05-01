@@ -33,11 +33,13 @@ public class MenuSystem : Singleton<MenuSystem> {
         Time.timeScale = 0;
         PlayerManager.Instance.SwitchActionMaps("menu");
         UIRouter.Instance.SwitchRoutes(UIRouter.Route.Pause);
+        SoundSystem.Instance.SetVolume(0.5f);
     }
 
     public void UnpauseGame() {
         Time.timeScale = 1;
         PlayerManager.Instance.SwitchActionMaps("gameplay");
         UIRouter.Instance.SwitchRoutes(UIRouter.Route.Game);
+        SoundSystem.Instance.SetVolume(1.0f);
     }
 }

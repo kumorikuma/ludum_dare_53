@@ -156,6 +156,7 @@ public class GameManager : Singleton<GameManager> {
                 }
 
                 SoundSystem.Instance.PlayLevelMusic(0);
+                SoundSystem.Instance.SetVolume(0.5f);
                 break;
             case 8:
                 // Score screen
@@ -165,6 +166,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void ResetGame() {
+        SoundSystem.Instance.SetVolume(1.0f);
         gameProgress = 0;
         timeRemaining = TOTAL_TIME;
         totalDistance = LevelManager.Instance.GetTotalDistance();
