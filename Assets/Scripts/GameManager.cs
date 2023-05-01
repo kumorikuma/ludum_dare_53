@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
     public bool DEVELOPMENT_MODE = false;
+    public static float TOTAL_TIME = 3 * 60f;
 
     [NonNullField]
     [SerializeField]
@@ -14,6 +15,8 @@ public class GameManager : Singleton<GameManager> {
 
     // Game stats
     private int money;
+    private float timeRemaining = TOTAL_TIME;
+    private float distanceTravelled = 0f;
 
     // Level stats
     private bool levelInProgress = false;
@@ -34,8 +37,10 @@ public class GameManager : Singleton<GameManager> {
             return;
         }
 
-        var timespan = TimeSpan.FromSeconds(Time.time - levelStartTime);
-        ReactUnityBridge.Instance.UpdateTimer($"Time: {timespan.ToString(@"hh\:mm\:ss")}");
+        timeRemaining -= Time.deltaTime;
+        var timespan = TimeSpan.FromSeconds(timeRemaining);
+        ReactUnityBridge.Instance.UpdateTimer(timespan.ToString(@"mm\:ss\.ffff"));
+        // ReactUnityBridge.Instance.UpdateDistance();
 
         // TODO: Instead of having an end-zone, check if game is over by y position of player?
         // Ideally we could have a cutscene at the end, maybe like a building where can pull off to deliver.
@@ -52,6 +57,7 @@ public class GameManager : Singleton<GameManager> {
                 FinishLevel();
             }
         }
+
     }
 
     public void ShowTitle() {
@@ -61,6 +67,7 @@ public class GameManager : Singleton<GameManager> {
 
     public void StartGame() {
         MenuSystem.Instance.ShowDialogue("game_intro");
+        timeRemaining = TOTAL_TIME;
     }
 
     public void StartLevel() {
