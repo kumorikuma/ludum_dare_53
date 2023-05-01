@@ -22,6 +22,10 @@ public class LevelData : ScriptableObject {
     public GameObject TransitionTile;
     public List<float> DeliveryLocations; // Values should be between [0, LevelLengthMeters]
 
+    public int GetLevelLengthMeters() {
+        return GameManager.Instance.DEVELOPMENT_MODE ? 400 : LevelLengthMeters;
+    }
+
     public List<int> GetLaneDirections() {
         List<int> laneDirections = new List<int>();
         for (int i = 0; i < OncomingTrafficLanes; i++) {

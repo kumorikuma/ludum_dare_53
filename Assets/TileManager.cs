@@ -5,26 +5,34 @@ using UnityEngine.SceneManagement;
 
 public class TileManager : Singleton<TileManager> {
     [NonNullField]
-    public GameObject InvisibleWallsPrefab;
+    public GameObject InvisibleWallsObject;
 
     [NonNullField]
     public GameObject DeliveryLocationPrefab;
 
-    private GameObject invisibleWallsObject;
-
-    // public int MaxViewDistance = 800;
-    public int MaxViewDistance = 3000;
+    public int MaxViewDistance = 800;
     private int maxLoadedTiles;
 
     private LevelData? currentLevel = null;
     private Queue<(int, GameObject)> loadedTiles = new Queue<(int, GameObject)>();
-    private Queue<(int, GameObject)> transitionTiles = new Queue<(int, GameObject)>(); // These should persist between levels
     private HashSet<int> loadedTileIndices = new HashSet<int>();
 
-    private float levelPositionStartOffset = 0;
+    private float levelOffset = 0;
     private int currentTile;
+    private int maxLoadedTileForLevel = -1; // Start it as -1 to stop first level from having an offset
+    private int maxLoadedTile = 0;
     private int tilesInLevel;
     private float stopLocation;
+
+    private int levelsLoaded = 0;
+
+    protected override void Awake() {
+        base.Awake();
+        // Clear any stuff here from development
+        foreach (Transform child in this.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
 
     void Update() {
         if (currentLevel == null) {
@@ -32,57 +40,58 @@ public class TileManager : Singleton<TileManager> {
         }
 
         float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
-        invisibleWallsObject.transform.position = new Vector3(
-            invisibleWallsObject.transform.position.x,
-            invisibleWallsObject.transform.position.y,
+        // TODO: move this out of here
+        InvisibleWallsObject.transform.position = new Vector3(
+            InvisibleWallsObject.transform.position.x,
+            InvisibleWallsObject.transform.position.y,
             playerPosition
         );
 
-        float maxPosition = playerPosition + MaxViewDistance;
-        currentTile = (int)(playerPosition / currentLevel.TileSize);
+        MaybeLoadMoreTiles();
+    }
+
+    public float GetLevelOffset() {
+        return levelOffset;
+    }
+
+    private void MaybeLoadMoreTiles() {
+        float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
+
+        float playerPositionInLevel = playerPosition - LevelManager.Instance.GetLevelOffset();
+        float maxPosition = playerPositionInLevel + MaxViewDistance;
+        currentTile = (int)(playerPositionInLevel / currentLevel.TileSize);
         int maxTileIdx = (int)(maxPosition / currentLevel.TileSize);
+        maxLoadedTileForLevel = maxTileIdx;
         for (int i = currentTile; i <= maxTileIdx; i++) {
             LoadTile(i);
         }
     }
 
     public void LoadLevel(LevelData level) {
+        // Can we... shift everything in the world back... such that the next level starts at 0?
+        // Can we put the user on a treadmill while in the transitioning phase?
+        levelsLoaded += 1;
+        maxLoadedTile = maxLoadedTile + maxLoadedTileForLevel;
+        levelOffset = (maxLoadedTile + 1) * level.TileSize;
+        Debug.Log($"Load Level {level.name} with offset {levelOffset}. MaxLoadedTile {maxLoadedTile}");
         currentTile = 0;
         currentLevel = level;
         maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 2;
-        tilesInLevel = (int)(level.LevelLengthMeters / level.TileSize); // How many tiles to use the regular level for.
+        tilesInLevel = (int)(level.GetLevelLengthMeters() / level.TileSize); // How many tiles to use the regular level for.
         stopLocation = (tilesInLevel + 1.25f) * level.TileSize;
 
-        // Unload current level
-        while (loadedTiles.Count > 0) {
-            UnloadOldestTile();
-        }
-        foreach (Transform child in this.transform) {
-            // There might also be other stuff under here
-            GameObject.Destroy(child.gameObject);
-        }
-
         // Initial tiles
-        float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
-        float maxPosition = playerPosition + MaxViewDistance;
-        currentTile = (int)(playerPosition / currentLevel.TileSize);
-        int maxTileIdx = (int)(maxPosition / currentLevel.TileSize);
-        Debug.Log(maxTileIdx);
-        for (int i = currentTile; i <= maxTileIdx; i++) {
-            LoadTile(i);
-        }
+        MaybeLoadMoreTiles();
 
-        // Spawn guard rails to stop player from going into the terrain
-        invisibleWallsObject = Instantiate(InvisibleWallsPrefab, Vector3.zero, Quaternion.identity);
-        invisibleWallsObject.transform.SetParent(this.transform);
+        // Adjust size of rails
         float roadWidth = (level.OncomingTrafficLanes + level.FollowingTrafficLanes) * level.LaneSize;
-        Transform rightRail = invisibleWallsObject.transform.Find("Right Rail");
+        Transform rightRail = InvisibleWallsObject.transform.Find("Right Rail");
         rightRail.position = new Vector3(
             roadWidth / 2,
             rightRail.position.y,
             rightRail.position.z
         );
-        Transform leftRail = invisibleWallsObject.transform.Find("Left Rail");
+        Transform leftRail = InvisibleWallsObject.transform.Find("Left Rail");
         leftRail.position = new Vector3(
             -roadWidth / 2,
             leftRail.position.y,
@@ -91,46 +100,43 @@ public class TileManager : Singleton<TileManager> {
     }
 
     void LoadTile(int tileIdx) {
-        if (loadedTileIndices.Contains(tileIdx)) {
+        int tileUid = tileIdx + levelsLoaded * 1000;
+
+        Debug.Log($"[TileManager] Load Tile {tileIdx}. UID: {tileUid}");
+
+        if (tileIdx < 0 || loadedTileIndices.Contains(tileUid)) {
             return;
         }
 
-        Debug.Log($"[TileManager] Load Tile: {tileIdx}");
+        Vector3 newTilePosition = new Vector3(0, 0, tileIdx * currentLevel.TileSize + GetLevelOffset());
 
-        Vector3 newTilePosition = new Vector3(0, 0, tileIdx * currentLevel.TileSize);
-        // Based on level length, should have X tiles.
-        if (tileIdx >= tilesInLevel) {
-            GameObject tilePrefab;
-            if (tileIdx == tilesInLevel) {
-                // Spawn exit tile (tile that contains the finish line)
-                tilePrefab = currentLevel.ExitTile;
-            } else if (tileIdx == tilesInLevel + 1) {
-                // Spawn stop tile (tile to pause the game and play cutscene)
-                tilePrefab = currentLevel.StopTile;
-            } else {
-                // Spawn level transition tiles.
-                tilePrefab = currentLevel.TransitionTile;
-            }
-            GameObject newTileObj = Instantiate(tilePrefab, newTilePosition, Quaternion.identity);
-            newTileObj.transform.parent = this.transform;
-            transitionTiles.Enqueue((tileIdx, newTileObj));
-            loadedTileIndices.Add(tileIdx);
-
-            // For stop tile, update the clearing location
-            if (tileIdx == tilesInLevel + 1) {
-                Material mat = newTileObj.GetComponentInChildren<MeshRenderer>().material;
-                mat.SetFloat("_ClearingLocation", stopLocation);
-            }
+        GameObject tilePrefab;
+        bool isRegularLevelTile = false;
+        if (tileIdx == 0) {
+            // Spawn first tile in the level
+            tilePrefab = currentLevel.EntryTile;
+        } else if (tileIdx == tilesInLevel) {
+            // Spawn exit tile (tile that contains the finish line)
+            tilePrefab = currentLevel.ExitTile;
+        } else if (tileIdx > tilesInLevel) {
+            // Spawn level transition tiles.
+            tilePrefab = currentLevel.TransitionTile;
         } else {
             int levelTileIdx = tileIdx % currentLevel.LevelTiles.Count;
-            GameObject newTileObj = Instantiate(currentLevel.LevelTiles[levelTileIdx], newTilePosition, Quaternion.identity);
-            newTileObj.transform.parent = this.transform;
+            tilePrefab = currentLevel.LevelTiles[levelTileIdx];
+            isRegularLevelTile = true;
+        }
+        GameObject newTileObj = Instantiate(tilePrefab, newTilePosition, Quaternion.identity);
+        newTileObj.transform.parent = this.transform;
+        loadedTiles.Enqueue((tileIdx, newTileObj));
+        loadedTileIndices.Add(tileUid);
+
+        if (isRegularLevelTile) {
+            // Hack to tile the first level
             Material mat = newTileObj.GetComponentInChildren<MeshRenderer>().material;
             if (tileIdx % 2 == 1) {
                 mat.SetFloat("_FlipV", 1);
             }
-            loadedTiles.Enqueue((tileIdx, newTileObj));
-            loadedTileIndices.Add(tileIdx);
 
             // Check if there is a delivery location that is within range of the tile
             float rangeMin = tileIdx * currentLevel.TileSize - 50;
@@ -138,20 +144,21 @@ public class TileManager : Singleton<TileManager> {
             List<float> deliveryLocations = currentLevel.DeliveryLocations;
             for (int i = 0; i < deliveryLocations.Count; i++) {
                 if (deliveryLocations[i] >= rangeMin && deliveryLocations[i] <= rangeMax) {
+                    float deliveryZPosition = deliveryLocations[i] + GetLevelOffset();
+
                     // Tell the material to stop drawing terrain in that area
                     mat.SetFloat("_HasClearingLocation", 1);
-                    mat.SetFloat("_ClearingLocation", deliveryLocations[i]);
+                    mat.SetFloat("_ClearingLocation", deliveryZPosition);
 
                     // ALso spawn a delivery location there
-                    GameObject deliveryLocationObj = Instantiate(DeliveryLocationPrefab, new Vector3(25, 0, deliveryLocations[i] + 15), Quaternion.identity);
+                    GameObject deliveryLocationObj = Instantiate(DeliveryLocationPrefab, new Vector3(25, 0, deliveryZPosition + 15), Quaternion.identity);
                     deliveryLocationObj.transform.SetParent(newTileObj.transform);
                 }
             }
+        }
 
-            if (loadedTiles.Count > maxLoadedTiles) {
-                // TODO: Implement loading / unloading
-                UnloadOldestTile();
-            }
+        if (loadedTiles.Count > maxLoadedTiles) {
+            UnloadOldestTile();
         }
     }
 

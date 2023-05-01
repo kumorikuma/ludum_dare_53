@@ -10,6 +10,13 @@
       },
       "hash": "87bc293c81dad2a4191232508cece1ec1a38c059"
     },
+    "com.reactunity.jint": {
+      "version": "0.15.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.reactunity.quickjs": {
       "version": "0.15.0",
       "depth": 0,

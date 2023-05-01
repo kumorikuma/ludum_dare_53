@@ -36,6 +36,14 @@ public class LevelManager : Singleton<LevelManager> {
     public List<LevelData> Levels = new List<LevelData>();
     public LevelData CurrentLevel;
 
+    public float GetEndPosition() {
+        return CurrentLevel.GetLevelLengthMeters() + GetLevelOffset();
+    }
+
+    public float GetLevelOffset() {
+        return TileManager.Instance.GetLevelOffset();
+    }
+
     public void LoadLevel(int levelIndex) {
         if (levelIndex < 0 || levelIndex >= Levels.Count) {
             Debug.LogError($"[LevelManager] Error loading level: Data for {levelIndex} not found!");

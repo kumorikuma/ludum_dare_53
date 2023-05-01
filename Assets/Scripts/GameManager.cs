@@ -6,6 +6,7 @@ using UnityEngine;
 // Controls overall game stuff like scoring, game start, game over
 
 public class GameManager : Singleton<GameManager> {
+    public bool DEVELOPMENT_MODE = false;
 
     [NonNullField]
     [SerializeField]
@@ -40,10 +41,16 @@ public class GameManager : Singleton<GameManager> {
         // Ideally we could have a cutscene at the end, maybe like a building where can pull off to deliver.
         // TODO: Can also give player a distance meter, maybe at the top of the screen
         float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
-        float progressPct = Math.Clamp(playerPosition / LevelManager.Instance.CurrentLevel.LevelLengthMeters, 0, 1);
+        float progressPct = Math.Clamp(playerPosition / LevelManager.Instance.CurrentLevel.GetLevelLengthMeters(), 0, 1);
         // Debug.Log(progressPct);
-        if (progressPct >= 1) {
-            FinishLevel();
+
+        if (playerPosition > LevelManager.Instance.GetEndPosition()) {
+            if (LevelManager.Instance.CurrentLevel.name == "Last Level") {
+                Debug.Log($"End game!!");
+            } else {
+                Debug.Log($"Finished Level: {playerPosition} > {LevelManager.Instance.GetEndPosition()}");
+                FinishLevel();
+            }
         }
     }
 
@@ -68,7 +75,8 @@ public class GameManager : Singleton<GameManager> {
         LevelManager.Instance.LoadLevel(levelIndex);
         Debug.Log($"Level Start!");
 
-        playerController.Reset();
+        // ??
+        // playerController.Reset();
 
         MenuSystem.Instance.UnpauseGame();
         SoundSystem.Instance.PlayLevelMusic(levelIndex);
@@ -85,6 +93,8 @@ public class GameManager : Singleton<GameManager> {
         var earnings = ComputeEarnings();
         money += earnings;
         MenuSystem.Instance.ShowLevelEnd(levelIndex, levelFinishTime - levelStartTime, 60, damages, deliveries, 0, earnings);
+
+        // Take away control from the user
     }
 
     public void NextLevel() {

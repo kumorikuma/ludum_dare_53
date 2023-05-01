@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d6197adafd34fe42a125837eac9a398, type: 3}
-  m_Name: Vaporwave Level
+  m_Name: Palm Tree Level
   m_EditorClassIdentifier: 
-  Name: Vaporwave
+  Name: Palm Trees
   LevelLengthMeters: 4000
   OncomingTrafficLanes: 2
   FollowingTrafficLanes: 2
   ShouldSpawnCars: 1
   CarSpawnsPerSecOncoming: 0.1
-  CarSpawnsPerSecFollowing: 0.2
+  CarSpawnsPerSecFollowing: 0.4
   LaneSize: 3.7
   TileSize: 400
-  EntryTile: {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
+  EntryTile: {fileID: 3346203251014832160, guid: 1219ea4492c88c0478f3bec645198afb, type: 3}
   LevelTiles:
   - {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
   ExitTile: {fileID: 3346203251014832160, guid: c2f964a5a14acc542af36977569ee997, type: 3}
