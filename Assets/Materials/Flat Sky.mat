@@ -58,8 +58,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SunTex:
         m_Texture: {fileID: 2800000, guid: 5e44bf1fd6730bf428c880a7d865f32e, type: 3}
-        m_Scale: {x: 1.84, y: 1.5}
-        m_Offset: {x: -0.42, y: -0.19}
+        m_Scale: {x: 1.84, y: 1.4}
+        m_Offset: {x: -0.42, y: -0.3}
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
