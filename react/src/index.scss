@@ -3,6 +3,11 @@
   src: url(resource:NotoSansJP)
 }
 
+@font-face {
+  font-family: "NotoSansLight";
+  src: url(resource:NotoSansLight)
+}
+
 .dialogue-bar {
   position: fixed;
   bottom: 0;
@@ -24,12 +29,22 @@
     align-items: flex-start;
     justify-content: flex-start;
     text-align: left;
-    font-family: sans-serif;
+    font-family: "NotoSansLight";
+  }
+
+  h1 {
+    height: 40px;
   }
 
   button {
+    margin-right: 24px;
+    align-self: flex-end;
     background-color: transparent;
     color: yellow;
+  }
+
+  p {
+    height: 100px;
   }
 }
 

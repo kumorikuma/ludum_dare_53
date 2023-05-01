@@ -15,7 +15,7 @@ conversations["game_intro"] = [
     { speaker: "Handler", text: "You must get it to the Director before sundown, which is... in 3 minutes. You got that?" },
     { speaker: "Agent", text: "3 Minutes?!" },
     { speaker: "Handler", text: "Yeah, so step on the gas. And careful not to get the company car damaged. \nWe'll be deducting the repair fees from your pay." },
-    { speaker: "", text: "Use [W] [A] [S] [D] keys to move." }
+    { speaker: "Handler", text: "Use [W] [A] [S] [D] keys to move." }
 ];
 conversations["boost_intro"] = [
     { speaker: "Handler", text: "Buddy, could you be going any slower?! At this rate you're never gonna make it!" },
@@ -83,7 +83,6 @@ export default function Dialogue(): React.ReactNode {
             <h1 className="title">{currentMessage ? currentMessage.speaker : ""}</h1>
             <view className="gradient-rule"></view>
             <p className="message">{currentMessage ? currentMessage.text : ""}</p>
-            <view className="gradient-rule"></view>
         </view>
         <button onClick={() => handleNext()}>
             {hasNext ? "CONTINUE" : "START"}
