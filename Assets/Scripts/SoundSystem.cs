@@ -12,13 +12,15 @@ public class SoundSystem : Singleton<SoundSystem> {
     }
     [SerializeField]
     private NamedAudioClip[] audioClips;
+    [SerializeField]
+    private AudioClip[] levelMusicClips;
 
     [SerializeField]
     private AudioSource sfxAudioSource;
     [SerializeField]
     private AudioSource engineAudioSource;
     [SerializeField]
-    private AudioSource bgmAudioSource;
+    private AudioSource levelMusicSource;
 
     [Header("Engine sound")]
     [SerializeField]
@@ -42,7 +44,21 @@ public class SoundSystem : Singleton<SoundSystem> {
     }
 
     public void PlayClip(string name) {
+        if (!clips.ContainsKey(name)) {
+            Debug.LogError($"SFX '{name}' not found");
+            return;
+        }
         sfxAudioSource.PlayOneShot(clips[name]);
+    }
+
+    public void PlayLevelMusic(int levelIndex) {
+        int clipIndex = levelIndex - 1;
+        if (clipIndex >= 0 && clipIndex < levelMusicClips.Length) {
+            levelMusicSource.clip = levelMusicClips[clipIndex];
+            levelMusicSource.Play();
+        } else {
+            levelMusicSource.Stop();
+        }
     }
 
     public void SetEngineLevel(float level) {

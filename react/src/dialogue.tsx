@@ -10,13 +10,34 @@ type Message = {
 
 let conversations = new Map<string, Message[]>();
 conversations["game_intro"] = [
-    { speaker: "Handler", text: "You're already on the road? Good. This package is of utmost importance. \nYou have 3 minutes to get it to the president." },
+    { speaker: "Handler", text: "You got the package? Good." },
+    { speaker: "Handler", text: "You must get it to the Director before sundown, which is... in 3 minutes. You got that?" },
     { speaker: "Agent", text: "3 Minutes?!" },
-    { speaker: "Handler", text: "Yeah, so be quick. And don't worry if the car gets a little banged up. \nWe'll just deduct the repair fees from your pay." },
+    { speaker: "Handler", text: "Yeah, so step on the gas. And careful not to get the company car damaged. \nWe'll be deducting the repair fees from your pay." },
+    { speaker: "", text: "Use [W] [A] [S] [D] keys to move." }
+];
+conversations["boost_intro"] = [
+    { speaker: "Handler", text: "Buddy, could you be going any slower?! At this rate you're never gonna make it!" },
+    { speaker: "Handler", text: "Look, I made some calls and got them to unlock your car's boost ability. \nIsn't over-the-air updates great?" },
+    { speaker: "", text: "Your car can now go faster. Use [W] to accelerate." },
 ];
 conversations["delivery_intro"] = [
-    { speaker: "Handler", text: "By the way, there appears to be a pandemic going around." },
-    { speaker: "Handler", text: "Could you also distribute these medicine at the marked buildings? We'll give you a bonus for it." },
+    { speaker: "Handler", text: "Oh, I forgot to mention. The car upgrade costs money which we'll be deducting from your pay." },
+    { speaker: "Agent", text: "What?!" },
+    { speaker: "Handler", text: "Hey, don't worry, I found another gig for you." },
+    { speaker: "Handler", text: "You know how there's a deadly disease spreading around the city, and our corporation has a monopoly on the cure? \nWe finally got a deal with the hospitals." },
+    { speaker: "Handler", text: "Drop off the cures in your car at hospitals along the way, and we'll give you a bonus." },
+    { speaker: "", text: "Press [E] to drop off cures." },
+];
+conversations["jump_into"] = [
+    { speaker: "Handler", text: "Looks like there's a lot of traffic ahead." },
+    { speaker: "Handler", text: "I got them to unlock the vertical mobility system on your car. That should help you out." },
+    { speaker: "", text: "Press [Space] to jump." },
+];
+conversations["unlimited_intro"] = [
+    { speaker: "Handler", text: "You still got a long way to go man." },
+    { speaker: "Handler", text: "Here, my final gift for you. I got them to remove all speed limits on your car. You'd better make it with this. Our careers depend on it." },
+    { speaker: "", text: "Your car no longer has a speed limit." },
 ];
 conversations["ending_good"] = [
     { speaker: "Agent", text: "Mr. President? Express delivery for you." },

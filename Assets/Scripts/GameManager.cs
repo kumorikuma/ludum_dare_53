@@ -71,6 +71,7 @@ public class GameManager : Singleton<GameManager> {
         playerController.Reset();
 
         MenuSystem.Instance.UnpauseGame();
+        SoundSystem.Instance.PlayLevelMusic(levelIndex);
     }
 
     public void FinishLevel() {
