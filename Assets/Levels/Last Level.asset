@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Last Level
   m_EditorClassIdentifier: 
   Name: Last Level
-  LevelLengthMeters: 4000
+  LevelLengthMeters: 2000
   OncomingTrafficLanes: 2
   FollowingTrafficLanes: 2
   ShouldSpawnCars: 1
-  CarSpawnsPerSecOncoming: 0.1
-  CarSpawnsPerSecFollowing: 0.4
+  CarSpawnsPerSecOncoming: 0.2
+  CarSpawnsPerSecFollowing: 0.5
   LaneSize: 3.7
   TileSize: 400
   EntryTile: {fileID: 3473162068231774562, guid: 25fdee2c833847c4f9d23f6016cda2c5, type: 3}
