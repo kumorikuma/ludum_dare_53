@@ -133,16 +133,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 1196071173308045190}
-  Acceleration: 60
-  SideAcceleration: 60
-  JumpForce: 20
+  Acceleration: 30
+  SideAcceleration: 30
+  JumpForce: 12
   DefaultSpeed: 30
-  MaxSpeed: 100
+  MaxSpeed: 60
   MinSpeed: 0
   MaxSideSpeed: 15
   gravity: -9.81
-  packageFireVelocity: {x: 10, y: 10, z: 10}
+  packageFireVelocity: {x: 15, y: 10, z: 5}
   PlayerModel: {fileID: 2603421068235396117}
+  DeliveryUnlocked: 0
+  JumpUnlocked: 0
+  SpeedUnlocked: 0
+  HyperspeedUnlocked: 0
   deliveryPackage: {fileID: 1627888012192027886, guid: 6021a30610a73844b891f3e295e1aa52, type: 3}
 --- !u!95 &1196071173308045190
 Animator:
@@ -437,8 +441,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525870571400836337}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.19, z: 1.769}
-  m_LocalScale: {x: 3.4321, y: 1.69706, z: 2}
+  m_LocalPosition: {x: 0, y: 0.11, z: 1.78}
+  m_LocalScale: {x: 3.734468, y: 1.8528501, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1196071173339332726}

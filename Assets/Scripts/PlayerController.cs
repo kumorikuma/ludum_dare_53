@@ -48,6 +48,11 @@ public class PlayerController : MonoBehaviour {
 
     public GameObject PlayerModel;
 
+    public bool DeliveryUnlocked = false;
+    public bool JumpUnlocked = false;
+    public bool SpeedUnlocked = false;
+    public bool HyperspeedUnlocked = false;
+
     [NonNullField]
     [SerializeField]
     private GameObject deliveryPackage;
@@ -79,11 +84,16 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    // public void Reset() {
-    //     var position = transform.position;
-    //     position.z = 0;
-    //     transform.position = position;
-    // }
+    public void Reset() {
+        var position = transform.position;
+        position.z = 0;
+        transform.position = position;
+
+        DeliveryUnlocked = false;
+        JumpUnlocked = false;
+        SpeedUnlocked = false;
+        HyperspeedUnlocked = false;
+    }
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -95,11 +105,20 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnJump() {
+        if (!JumpUnlocked) {
+            return;
+        }
+        if (transform.position.y > 0) {
+            return;
+        }
         inputJumpOnNextFrame = true;
         Debug.Log("OnJump");
     }
 
     public void OnShoot() {
+        if (!DeliveryUnlocked) {
+            return;
+        }
         if (currentShotCooldown > 0) {
             return;
         }
@@ -140,7 +159,14 @@ public class PlayerController : MonoBehaviour {
             // Decay to default speed
             velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.fixedDeltaTime;
         }
-        velocity.z = Mathf.Clamp(velocity.z, MinSpeed, MaxSpeed);
+
+        var upgradedMaxSpeed = MaxSpeed;
+        if (HyperspeedUnlocked) {
+            upgradedMaxSpeed = 200;
+        } else if (SpeedUnlocked) {
+            upgradedMaxSpeed = 100;
+        }
+        velocity.z = Mathf.Clamp(velocity.z, MinSpeed, upgradedMaxSpeed);
         SoundSystem.Instance.SetEngineLevel(velocity.z / MaxSpeed);
 
         // Move left / right
@@ -155,7 +181,8 @@ public class PlayerController : MonoBehaviour {
         velocity.x = Mathf.Clamp(velocity.x, -MaxSideSpeed, MaxSideSpeed);
 
         // Jump
-        if (inputJumpOnNextFrame) {
+        if (inputJumpOnNextFrame && transform.position.y <= 0) {
+            SoundSystem.Instance.PlayClip("yeet");
             velocity.y = JumpForce;
             inputJumpOnNextFrame = false;
         }

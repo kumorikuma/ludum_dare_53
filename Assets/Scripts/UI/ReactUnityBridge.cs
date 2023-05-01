@@ -86,16 +86,16 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
     }
 
     public static void StartGameClicked() {
-        GameManager.Instance.StartGame();
+        GameManager.Instance.AdvanceGameProgress();
     }
 
     public static void DialogueFinished() {
         Debug.Log("DialogueFinished");
-        GameManager.Instance.StartLevel();
+        GameManager.Instance.AdvanceGameProgress();
     }
 
     public static void NextLevelClicked() {
-        GameManager.Instance.NextLevel();
+        GameManager.Instance.AdvanceGameProgress();
     }
 
     public static void TestDebug() {

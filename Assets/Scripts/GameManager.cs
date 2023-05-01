@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager> {
     PlayerController playerController;
 
     // Game stats
+    private int gameProgress = 0;
     private int money;
     private float timeRemaining = TOTAL_TIME;
     private float distanceTravelled = 0f;
@@ -36,7 +37,7 @@ public class GameManager : Singleton<GameManager> {
     void Start() {
         cameraMat = PlayerManager.Instance.CameraController.GetComponentInChildren<MeshRenderer>().material;
 
-        ShowTitle();
+        ResetGame();
         // StartLevel();
     }
 
@@ -77,21 +78,14 @@ public class GameManager : Singleton<GameManager> {
         MenuSystem.Instance.ShowTitle();
     }
 
-    public void StartGame() {
-        MenuSystem.Instance.ShowDialogue("game_intro");
-        timeRemaining = TOTAL_TIME;
-        totalDistance = LevelManager.Instance.GetTotalDistance();
-    }
-
-    public void StartLevel() {
+    public void StartLevel(int level) {
         levelInProgress = true;
-        levelIndex += 1;
+        levelIndex = level;
         levelStartTime = Time.time;
         damages = 0;
         levelStartPosition = PlayerManager.Instance.PlayerController.transform.position.z;
         distanceTravelledThisLevel = 0f;
 
-        // LevelManager.Instance.LoadBoTestLevel();
         LevelManager.Instance.LoadLevel(levelIndex);
         Debug.Log($"Level Start!");
 
@@ -111,16 +105,60 @@ public class GameManager : Singleton<GameManager> {
         // Show score screen
         var timespan = TimeSpan.FromSeconds(levelFinishTime - levelStartTime);
         Debug.Log($"Level Finished! Time {timespan.ToString(@"hh\:mm\:ss")}");
+
+        AdvanceGameProgress();
         // TODO: Get time limit and delivery goal from LevelData
-        var earnings = ComputeEarnings();
-        money += earnings;
-        MenuSystem.Instance.ShowLevelEnd(levelIndex, levelFinishTime - levelStartTime, 60, damages, deliveries, 0, earnings);
+        // var earnings = ComputeEarnings();
+        // money += earnings;
+        // MenuSystem.Instance.ShowLevelEnd(levelIndex, levelFinishTime - levelStartTime, 60, damages, deliveries, 0, earnings);
 
         // Take away control from the user
     }
 
-    public void NextLevel() {
-        StartLevel();
+    public void AdvanceGameProgress() {
+        gameProgress += 1;
+        switch (gameProgress) {
+            case 0:
+                // Title
+                break;
+            case 1:
+                // Intro dialogue
+                MenuSystem.Instance.ShowDialogue("game_intro");
+                break;
+            case 2:
+                // Level 1
+                StartLevel(1);
+                break;
+            case 3:
+                // Level 2 dialogue
+                MenuSystem.Instance.ShowDialogue("delivery_intro");
+                playerController.DeliveryUnlocked = true;
+                break;
+            case 4:
+                // Level 2 - delivery powerup
+                StartLevel(2);
+                break;
+            case 5:
+                // Level 3 dialogue
+                MenuSystem.Instance.ShowDialogue("jump_intro");
+                playerController.JumpUnlocked = true;
+                break;
+            case 6:
+                // Level 3
+                StartLevel(3);
+                break;
+            case 7:
+                // Game end
+                MenuSystem.Instance.ShowDialogue("ending_good");
+                break;
+        }
+    }
+
+    public void ResetGame() {
+        gameProgress = 0;
+        timeRemaining = TOTAL_TIME;
+        totalDistance = LevelManager.Instance.GetTotalDistance();
+        ShowTitle();
     }
 
     public void ScoreCollision(float collisionSpeed) {

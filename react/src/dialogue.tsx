@@ -30,7 +30,7 @@ conversations["delivery_intro"] = [
     { speaker: "Handler", text: "Drop off the cures in your car at hospitals along the way, and we'll give you a bonus." },
     { speaker: "", text: "Press [E] to drop off cures." },
 ];
-conversations["jump_into"] = [
+conversations["jump_intro"] = [
     { speaker: "Handler", text: "Looks like there's a lot of traffic ahead." },
     { speaker: "Handler", text: "I got them to unlock the vertical mobility system on your car. That should help you out." },
     { speaker: "", text: "Press [Space] to jump." },
