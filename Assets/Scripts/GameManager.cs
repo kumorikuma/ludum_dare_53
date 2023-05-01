@@ -24,7 +24,8 @@ public class GameManager : Singleton<GameManager> {
     private int deliveries;
 
     void Start() {
-        ShowTitle();
+        // ShowTitle();
+        StartLevel();
     }
 
     void Update() {

@@ -16,7 +16,7 @@ Shader "Unlit/GroundShader"
         _LightVector("Directional Light Vector", Vector) = (0, -1, -1)
         _KeyLightBrightness("Key Light Brightness", Range(0, 1)) = 0.3
         _ClearingLocation("Clearing Location", float) = 50
-        [Toggle(USE_CLEARING)] _HasClearingLocation("Has Clearing", Float) = 0
+        [Toggle(USE_CLEARING)] _HasClearingLocation("Has Clearing", Float) = 1
         // InnerRadius where heightmap = 0
         // OuterRadius where (OuterRadius - InnerRadius) = Blend
         _BgGridDensity ("Bg Grid Density", Range(1, 100)) = 40

@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 public class TileManager : Singleton<TileManager> {
     [NonNullField]
     public GameObject InvisibleWallsPrefab;
+
+    [NonNullField]
+    public GameObject DeliveryLocationPrefab;
+
     private GameObject invisibleWallsObject;
 
     public int MaxViewDistance = 800;
@@ -72,6 +76,22 @@ public class TileManager : Singleton<TileManager> {
         GameObject newTileObj = Instantiate(currentLevel.Tiles[tileIdx], new Vector3(0, 0, currentTile * currentLevel.TileSize), Quaternion.identity);
         newTileObj.transform.parent = this.transform;
         loadedTiles.Enqueue(newTileObj);
+
+        // Check if there is a delivery location that is within range of the tile
+        float rangeMin = tileIdx * currentLevel.TileSize - 50;
+        float rangeMax = (tileIdx + 1) * currentLevel.TileSize + 50;
+        List<float> deliveryLocations = currentLevel.DeliveryLocations;
+        for (int i = 0; i < deliveryLocations.Count; i++) {
+            if (deliveryLocations[i] >= rangeMin && deliveryLocations[i] <= rangeMax) {
+                // Tell the material to stop drawing terrain in that area
+                Material mat = newTileObj.GetComponentInChildren<MeshRenderer>().material;
+                mat.SetFloat("_ClearingLocation", deliveryLocations[i]);
+
+                // ALso spawn a delivery location there
+                GameObject deliveryLocationObj = Instantiate(DeliveryLocationPrefab, new Vector3(25, 0, deliveryLocations[i] + 15), Quaternion.identity);
+                deliveryLocationObj.transform.SetParent(newTileObj.transform);
+            }
+        }
 
         if (loadedTiles.Count > maxLoadedTiles) {
             // TODO: Implement loading / unloading
