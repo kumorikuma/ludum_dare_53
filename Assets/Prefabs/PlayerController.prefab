@@ -50,16 +50,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Animator: {fileID: 1196071173308045190}
-  Acceleration: 60
-  SideAcceleration: 60
+  Acceleration: 30
+  SideAcceleration: 30
   JumpForce: 20
   DefaultSpeed: 30
-  MaxSpeed: 100
+  MaxSpeed: 60
   MinSpeed: 0
   MaxSideSpeed: 15
   gravity: -9.81
-  packageFireVelocity: {x: 10, y: 10, z: 10}
+  packageFireVelocity: {x: 15, y: 10, z: 5}
   PlayerModel: {fileID: 0}
+  BonusSpeed: 0
+  DeliveryUnlocked: 0
+  JumpUnlocked: 0
+  SpeedUnlocked: 0
+  HyperspeedUnlocked: 0
   deliveryPackage: {fileID: 1627888012192027886, guid: 6021a30610a73844b891f3e295e1aa52, type: 3}
 --- !u!95 &1196071173308045190
 Animator:
@@ -177,7 +182,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 5000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -354,8 +359,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525870571400836337}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.19, z: 1.769}
-  m_LocalScale: {x: 3.4321, y: 1.69706, z: 2}
+  m_LocalPosition: {x: 0, y: 0.11, z: 1.78}
+  m_LocalScale: {x: 3.734468, y: 1.8528501, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1196071173339332726}
@@ -418,6 +423,70 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1196071173308045185}
     m_Modifications:
+    - target: {fileID: 3596381277124030893, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.5568001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596381277124030893, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.5568001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596381277124030893, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.5568001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596381277124030893, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 5988546700231878605, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ad14be02401a904189f3b86dae808dc, type: 2}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.colorGradient.atime1
+      value: 17540
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.colorGradient.ctime2
+      value: 17540
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.7688679
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.7688679
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.b
+      value: 0.05913353
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.g
+      value: 0.05913353
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].time
+      value: 0.16517001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inSlope
+      value: -2.0150278
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inWeight
+      value: 0.16304073
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213415082709154744, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].outSlope
+      value: -2.0150278
+      objectReference: {fileID: 0}
     - target: {fileID: 7206177675903952413, guid: 9eefb0521e7f7ad4eb3a5bb4cb0cfafd, type: 3}
       propertyPath: m_RootOrder
       value: 0
