@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour {
             velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.fixedDeltaTime;
         }
 
-        var upgradedMaxSpeed = MaxSpeed;
+        var upgradedMaxSpeed = MaxSpeed + BonusSpeed;
         if (HyperspeedUnlocked) {
             upgradedMaxSpeed = 200;
         } else if (SpeedUnlocked) {
