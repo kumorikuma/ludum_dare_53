@@ -56,12 +56,8 @@ public class GameManager : Singleton<GameManager> {
         // Debug.Log(progressPct);
 
         if (playerPosition > LevelManager.Instance.GetEndPosition()) {
-            if (LevelManager.Instance.CurrentLevel.name == "Last Level") {
-                Debug.Log($"End game!!");
-            } else {
-                Debug.Log($"Finished Level: {playerPosition} > {LevelManager.Instance.GetEndPosition()}");
-                FinishLevel();
-            }
+            Debug.Log($"Finished Level: {playerPosition} > {LevelManager.Instance.GetEndPosition()}");
+            FinishLevel();
         }
 
         // Fake distance travelled to account for offset
@@ -106,11 +102,15 @@ public class GameManager : Singleton<GameManager> {
         var timespan = TimeSpan.FromSeconds(levelFinishTime - levelStartTime);
         Debug.Log($"Level Finished! Time {timespan.ToString(@"hh\:mm\:ss")}");
 
+        // if (LevelManager.Instance.CurrentLevel.name == "Last Level") {
+        //     FinishLevel();
+        //     Debug.Log($"End game!!");
+        //     AdvanceGameProgress();
+        // }
         AdvanceGameProgress();
         // TODO: Get time limit and delivery goal from LevelData
         // var earnings = ComputeEarnings();
         // money += earnings;
-        // MenuSystem.Instance.ShowLevelEnd(levelIndex, levelFinishTime - levelStartTime, 60, damages, deliveries, 0, earnings);
 
         // Take away control from the user
     }
@@ -149,7 +149,17 @@ public class GameManager : Singleton<GameManager> {
                 break;
             case 7:
                 // Game end
-                MenuSystem.Instance.ShowDialogue("ending_good");
+                if (timeRemaining <= 0) {
+                    MenuSystem.Instance.ShowDialogue("ending_bad");
+                } else {
+                    MenuSystem.Instance.ShowDialogue("ending_good");
+                }
+
+                SoundSystem.Instance.PlayLevelMusic(0);
+                break;
+            case 8:
+                // Score screen
+                MenuSystem.Instance.ShowLevelEnd(levelIndex, timeRemaining, 0, damages, deliveries, 0, money);
                 break;
         }
     }
@@ -158,13 +168,15 @@ public class GameManager : Singleton<GameManager> {
         gameProgress = 0;
         timeRemaining = TOTAL_TIME;
         totalDistance = LevelManager.Instance.GetTotalDistance();
+        playerController.Reset();
         ShowTitle();
     }
 
     public void ScoreCollision(float collisionSpeed) {
-        var damage = 1 + (int)collisionSpeed;
-        money -= damage;
-        damages += damages;
+        damages += 1;
+        // var damage = 1 + (int)collisionSpeed;
+        // money -= damage;
+        // damages += damages;
         // TODO: popup damage text
         // ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
     }
@@ -173,6 +185,7 @@ public class GameManager : Singleton<GameManager> {
         money += 100;
         deliveries += 1;
         SoundSystem.Instance.PlayClip("deliverySuccess");
+        playerController.BonusSpeed += 10;
     }
 
     private int ComputeEarnings() {

@@ -10,9 +10,11 @@ function pad(num, size) {
 
 // Format to mm:ss
 function formatTime(seconds: number): string {
-    var mins = Math.floor(seconds / 60);
-    var secs = Math.floor(seconds - (mins * 60));
-    return `${mins}:${pad(secs, 2)}`;
+    const negative = seconds < 0 ? "-" : "";
+    const absSeconds = seconds < 0 ? -seconds : seconds;
+    const mins = Math.floor(absSeconds / 60);
+    const secs = Math.floor(absSeconds - (mins * 60));
+    return `${negative}${mins}:${pad(secs, 2)}`;
 }
 
 export default function LevelEnd(): React.ReactNode {
@@ -27,18 +29,18 @@ export default function LevelEnd(): React.ReactNode {
     const scoreEarnings: number = useReactiveValue(globals.scoreEarnings);
 
     const handleNext = () => {
-        Interop.GetType('ReactUnityBridge').NextLevelClicked()
+        Interop.GetType('ReactUnityBridge').RestartGameClicked();
     }
 
     return (
         <view className="level-end">
-            <h1 className="title">{`CHECKPOINT ${scoreLevel} REACHED`}</h1>
-            <h2 className="stat">{`TIME: ${formatTime(scoreTime)} / ${formatTime(scoreTimeLimit)}`}</h2>
-            <h2 className="stat">{`ANTIDOTES DELIVERED: ${scoreDeliveries} / ${scoreDeliveriesGoal}`}</h2>
-            <h2 className="stat">{`DAMAGES: $${scoreDamages}`}</h2>
-            <h2 className="stat">{`EARNINGS: $${scoreEarnings}`}</h2>
+            <h1 className="title">{`GAME OVER`}</h1>
+            <h2 className="stat">{`TIME REMAINING: ${formatTime(scoreTime)}`}</h2>
+            <h2 className="stat">{`CURES DELIVERED: ${scoreDeliveries}`}</h2>
+            <h2 className="stat">{`COLLISIONS: ${scoreDamages}`}</h2>
+            {/* <h2 className="stat">{`SCORE: ${scoreEarnings}`}</h2> */}
             <button onClick={() => handleNext()}>
-                NEXT
+                RESTART
             </button>
         </view>
     );

@@ -68,6 +68,10 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
 
     public void UpdateHud(float timeRemaining, int money, float distance, float totalDistance) {
         var timeRemainingText = TimeSpan.FromSeconds(timeRemaining).ToString(@"m\:ss\.ff");
+        if (timeRemaining < 0) {
+            // For some reason the timespan doesn't handle negative the way I did it
+            timeRemainingText = "-" + timeRemainingText;
+        }
 
         this.timerText.Value = timeRemainingText;
         this.money.Value = money;
@@ -96,6 +100,10 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
 
     public static void NextLevelClicked() {
         GameManager.Instance.AdvanceGameProgress();
+    }
+
+    public static void RestartGameClicked() {
+        GameManager.Instance.ResetGame();
     }
 
     public static void TestDebug() {

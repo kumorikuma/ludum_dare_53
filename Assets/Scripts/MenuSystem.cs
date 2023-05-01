@@ -29,10 +29,6 @@ public class MenuSystem : Singleton<MenuSystem> {
         UIRouter.Instance.SwitchRoutes(UIRouter.Route.LevelEnd);
     }
 
-    public void ShowUpgrades() {
-        // TODO
-    }
-
     public void PauseGame() {
         Time.timeScale = 0;
         PlayerManager.Instance.SwitchActionMaps("menu");

@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 
     public GameObject PlayerModel;
 
+    public float BonusSpeed = 0f;
     public bool DeliveryUnlocked = false;
     public bool JumpUnlocked = false;
     public bool SpeedUnlocked = false;
@@ -85,10 +86,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Reset() {
-        var position = transform.position;
-        position.z = 0;
-        transform.position = position;
+        transform.position = new Vector3(2, 0, 0);
 
+        BonusSpeed = 0f;
         DeliveryUnlocked = false;
         JumpUnlocked = false;
         SpeedUnlocked = false;
