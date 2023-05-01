@@ -78,4 +78,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CarPrefab: {fileID: 4655157201022562381, guid: 47aa156de540b464db1c280ab1444c8e, type: 3}
   CarContainer: {fileID: 1660458887}
+  Seed: 1234
   DEFAULT_CRUISE_SPEED: 26.8224
+  OncomingTrafficSpawnDistance: 800
+  OncomingTrafficDespawnDistance: 50
+  FollowingTrafficSpawnDistance: 50
+  FollowingTrafficDespawnDistance: 800
+  SpawnCheckIntervalS: 0.2
