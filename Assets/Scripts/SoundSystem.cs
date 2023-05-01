@@ -13,10 +13,15 @@ public class SoundSystem : Singleton<SoundSystem> {
     [SerializeField]
     private NamedAudioClip[] audioClips;
 
+    [SerializeField]
+    private AudioSource sfxAudioSource;
+    [SerializeField]
+    private AudioSource engineAudioSource;
+    [SerializeField]
+    private AudioSource bgmAudioSource;
 
     // Private fields
     private Dictionary<string, AudioClip> clips;
-    private AudioSource audioSource;
 
     void OnValidate() {
         // Move sounds from the array into a hashmap
@@ -26,12 +31,13 @@ public class SoundSystem : Singleton<SoundSystem> {
         }
     }
 
-    void Start() {
-        audioSource = GetComponent<AudioSource>();
+    public void PlayClip(string name) {
+        sfxAudioSource.PlayOneShot(clips[name]);
     }
 
-    public void PlayClip(string name) {
-        audioSource.PlayOneShot(clips[name]);
+    public void SetEngineLevel(float level) {
+        engineAudioSource.pitch = 0.5f + level * 2f;
+        engineAudioSource.volume = 0.2f + level * 0.4f;
     }
 
 }

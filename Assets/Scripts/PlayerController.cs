@@ -129,6 +129,7 @@ public class PlayerController : MonoBehaviour {
             velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.fixedDeltaTime;
         }
         velocity.z = Mathf.Clamp(velocity.z, MinSpeed, MaxSpeed);
+        SoundSystem.Instance.SetEngineLevel(velocity.z / MaxSpeed);
 
         // Move left / right
         if (inputMoveVector.x > 0.1) {
