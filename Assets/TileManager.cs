@@ -76,7 +76,7 @@ public class TileManager : Singleton<TileManager> {
         Debug.Log($"Load Level {level.name} with offset {levelOffset}. MaxLoadedTile {maxLoadedTile}");
         currentTile = 0;
         currentLevel = level;
-        maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 2;
+        maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 3;
         tilesInLevel = (int)(level.GetLevelLengthMeters() / level.TileSize); // How many tiles to use the regular level for.
         stopLocation = (tilesInLevel + 1.25f) * level.TileSize;
 
