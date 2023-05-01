@@ -135,13 +135,15 @@ MonoBehaviour:
   Animator: {fileID: 1196071173308045190}
   Acceleration: 60
   SideAcceleration: 60
-  JumpForce: 1
-  DefaultSpeed: 0
+  JumpForce: 20
+  DefaultSpeed: 30
   MaxSpeed: 100
-  MinSpeed: -10
+  MinSpeed: 0
   MaxSideSpeed: 15
   gravity: -9.81
+  packageFireVelocity: {x: 10, y: 10, z: 10}
   PlayerModel: {fileID: 2603421068235396117}
+  deliveryPackage: {fileID: 1627888012192027886, guid: 6021a30610a73844b891f3e295e1aa52, type: 3}
 --- !u!95 &1196071173308045190
 Animator:
   serializedVersion: 5
@@ -177,7 +179,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!143 &1196071173308045195
 CharacterController:

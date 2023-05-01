@@ -44,7 +44,13 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float gravity = -9.81f;
 
+    public Vector3 packageFireVelocity = new Vector3(0, 0, 0);
+
     public GameObject PlayerModel;
+
+    [NonNullField]
+    [SerializeField]
+    private GameObject deliveryPackage;
 
     //Private movement variables
     private Rigidbody rb;
@@ -67,8 +73,6 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         characterController = GetComponent<CharacterController>();
-        // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.visible = false;
     }
 
     public void OnMove(Vector2 moveVector) {
@@ -78,6 +82,14 @@ public class PlayerController : MonoBehaviour {
     public void OnJump() {
         inputJumpOnNextFrame = true;
         Debug.Log("OnJump");
+    }
+
+    public void OnShoot() {
+        var package = Instantiate(deliveryPackage, transform.position, Quaternion.identity);
+        var packageRb = package.GetComponent<Rigidbody>();
+        packageRb.velocity = velocity + packageFireVelocity;
+        var rotationForce = packageRb.velocity.magnitude;
+        packageRb.AddTorque(Random.onUnitSphere * rotationForce);
     }
 
     // Using KBM controls, there's a specific button to walk.
@@ -123,6 +135,13 @@ public class PlayerController : MonoBehaviour {
 
         // Gravity
         velocity.y += gravity * Time.fixedDeltaTime;
+
+        if (transform.position.y <= 0) {
+            var position = transform.position;
+            position.y = 0;
+            transform.position = position;
+            velocity.y = Mathf.Max(0, velocity.y);
+        }
 
         rb.velocity = velocity;
 

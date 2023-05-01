@@ -380,12 +380,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerController
       objectReference: {fileID: 0}
-    - target: {fileID: 1196071173308045187, guid: 9016306ee4ba4c64eb5d879d2d282e7c, type: 3}
-      propertyPath: DefaultSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1525870571400836339, guid: 9016306ee4ba4c64eb5d879d2d282e7c, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9016306ee4ba4c64eb5d879d2d282e7c, type: 3}
 --- !u!1 &706004449
 GameObject:

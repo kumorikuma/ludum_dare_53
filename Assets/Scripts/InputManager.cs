@@ -17,6 +17,9 @@ public class InputManager : MonoBehaviour {
     void OnWalk(InputValue value) {
         PlayerManager.Instance.PlayerController.OnWalk(value.isPressed);
     }
+    void OnShoot() {
+        PlayerManager.Instance.PlayerController.OnShoot();
+    }
 
     void OnJoystickLook(InputValue value) {
         PlayerManager.Instance.CameraController.OnLook(value.Get<Vector2>() * JoystickLookSensitivity);
