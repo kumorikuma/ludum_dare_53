@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ReactUnity;
@@ -17,7 +18,9 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
 
     // HUD texts
     public ReactiveValue<string> timerText = new ReactiveValue<string>();
-    public ReactiveValue<string> damagesText = new ReactiveValue<string>();
+    public ReactiveValue<int> money = new ReactiveValue<int>();
+    public ReactiveValue<float> distance = new ReactiveValue<float>();
+    public ReactiveValue<float> totalDistance = new ReactiveValue<float>();
 
     // Score screen
     public ReactiveValue<int> scoreLevel = new ReactiveValue<int>();
@@ -42,7 +45,9 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
 
         // HUD
         reactRenderer.Globals["timerText"] = timerText;
-        reactRenderer.Globals["damagesText"] = damagesText;
+        reactRenderer.Globals["money"] = money;
+        reactRenderer.Globals["distance"] = distance;
+        reactRenderer.Globals["totalDistance"] = totalDistance;
 
         // Score screen
         reactRenderer.Globals["scoreLevel"] = scoreLevel;
@@ -61,12 +66,13 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
         route.Value = data;
     }
 
-    public void UpdateTimer(string text) {
-        timerText.Value = text;
-    }
+    public void UpdateHud(float timeRemaining, int money, float distance, float totalDistance) {
+        var timeRemainingText = TimeSpan.FromSeconds(timeRemaining).ToString(@"m\:ss\.ff");
 
-    public void UpdateDamages(string text) {
-        damagesText.Value = text;
+        this.timerText.Value = timeRemainingText;
+        this.money.Value = money;
+        this.distance.Value = distance;
+        this.totalDistance.Value = totalDistance;
     }
 
     public void UpdateScores(int level, float time, float timeLimit, int damages, int deliveries, int deliveriesGoal, int earnings) {

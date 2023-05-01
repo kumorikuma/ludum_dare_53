@@ -17,6 +17,7 @@ public class GameManager : Singleton<GameManager> {
     private int money;
     private float timeRemaining = TOTAL_TIME;
     private float distanceTravelled = 0f;
+    private float totalDistance = 0f;
 
     // Level stats
     private bool levelInProgress = false;
@@ -26,6 +27,7 @@ public class GameManager : Singleton<GameManager> {
     private float timeLimit;
     private int damages;
     private int deliveries;
+    private float distanceTravelledThisLevel = 0f;
 
     // Others
     Material cameraMat;
@@ -43,9 +45,6 @@ public class GameManager : Singleton<GameManager> {
         }
 
         timeRemaining -= Time.deltaTime;
-        var timespan = TimeSpan.FromSeconds(timeRemaining);
-        ReactUnityBridge.Instance.UpdateTimer(timespan.ToString(@"mm\:ss\.ffff"));
-        // ReactUnityBridge.Instance.UpdateDistance();
 
         // TODO: Instead of having an end-zone, check if game is over by y position of player?
         // Ideally we could have a cutscene at the end, maybe like a building where can pull off to deliver.
@@ -63,7 +62,10 @@ public class GameManager : Singleton<GameManager> {
             }
         }
 
+        distanceTravelledThisLevel = Mathf.Max(0f, playerPosition - LevelManager.Instance.GetLevelOffset());
+
         UpdateSunset();
+        UpdateHud();
     }
 
     public void ShowTitle() {
@@ -74,6 +76,7 @@ public class GameManager : Singleton<GameManager> {
     public void StartGame() {
         MenuSystem.Instance.ShowDialogue("game_intro");
         timeRemaining = TOTAL_TIME;
+        totalDistance = LevelManager.Instance.GetTotalDistance();
     }
 
     public void StartLevel() {
@@ -81,8 +84,7 @@ public class GameManager : Singleton<GameManager> {
         levelIndex += 1;
         levelStartTime = Time.time;
         damages = 0;
-
-        ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
+        distanceTravelledThisLevel = 0f;
 
         // LevelManager.Instance.LoadBoTestLevel();
         LevelManager.Instance.LoadLevel(levelIndex);
@@ -98,9 +100,11 @@ public class GameManager : Singleton<GameManager> {
     public void FinishLevel() {
         levelInProgress = false;
         levelFinishTime = Time.time;
-        var timespan = TimeSpan.FromSeconds(levelFinishTime - levelStartTime);
+
+        distanceTravelled += distanceTravelledThisLevel;
 
         // Show score screen
+        var timespan = TimeSpan.FromSeconds(levelFinishTime - levelStartTime);
         Debug.Log($"Level Finished! Time {timespan.ToString(@"hh\:mm\:ss")}");
         // TODO: Get time limit and delivery goal from LevelData
         var earnings = ComputeEarnings();
@@ -115,11 +119,15 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void ScoreCollision(float collisionSpeed) {
-        damages += 1 + (int)collisionSpeed;
-        ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
+        var damage = 1 + (int)collisionSpeed;
+        money -= damage;
+        damages += damages;
+        // TODO: popup damage text
+        // ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
     }
 
     public void ScorePackage() {
+        money += 100;
         deliveries += 1;
         SoundSystem.Instance.PlayClip("deliverySuccess");
     }
@@ -134,6 +142,11 @@ public class GameManager : Singleton<GameManager> {
     private void UpdateSunset() {
         var sunsetValue = Mathf.Clamp(1f - timeRemaining / TOTAL_TIME, 0f, 1f);
         cameraMat.SetFloat("_Sunset", sunsetValue);
+    }
+
+    private void UpdateHud() {
+        Debug.Log($"distanceTravelled {distanceTravelled} distanceTravelledThisLevel {distanceTravelledThisLevel}");
+        ReactUnityBridge.Instance.UpdateHud(timeRemaining, money, distanceTravelled + distanceTravelledThisLevel, totalDistance);
     }
 
 }

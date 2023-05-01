@@ -102,7 +102,7 @@ public class TileManager : Singleton<TileManager> {
     void LoadTile(int tileIdx) {
         int tileUid = tileIdx + levelsLoaded * 1000;
 
-        Debug.Log($"[TileManager] Load Tile {tileIdx}. UID: {tileUid}");
+        // Debug.Log($"[TileManager] Load Tile {tileIdx}. UID: {tileUid}");
 
         if (tileIdx < 0 || loadedTileIndices.Contains(tileUid)) {
             return;

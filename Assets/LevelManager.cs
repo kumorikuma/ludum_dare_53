@@ -44,6 +44,14 @@ public class LevelManager : Singleton<LevelManager> {
         return TileManager.Instance.GetLevelOffset();
     }
 
+    public float GetTotalDistance() {
+        var total = 0f;
+        for (int i = 0; i < Levels.Count; i++) {
+            total += Levels[i].GetLevelLengthMeters();
+        }
+        return total;
+    }
+
     public void LoadLevel(int levelIndex) {
         if (levelIndex < 0 || levelIndex >= Levels.Count) {
             Debug.LogError($"[LevelManager] Error loading level: Data for {levelIndex} not found!");
@@ -58,4 +66,5 @@ public class LevelManager : Singleton<LevelManager> {
         // Start the player in the first following traffic lane
         // PlayerManager.Instance.
     }
+
 }

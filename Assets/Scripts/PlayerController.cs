@@ -79,11 +79,11 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    public void Reset() {
-        var position = transform.position;
-        position.z = 0;
-        transform.position = position;
-    }
+    // public void Reset() {
+    //     var position = transform.position;
+    //     position.z = 0;
+    //     transform.position = position;
+    // }
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
