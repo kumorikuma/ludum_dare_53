@@ -27,7 +27,12 @@ public class GameManager : Singleton<GameManager> {
     private int damages;
     private int deliveries;
 
+    // Others
+    Material cameraMat;
+
     void Start() {
+        cameraMat = PlayerManager.Instance.CameraController.GetComponentInChildren<MeshRenderer>().material;
+
         ShowTitle();
         // StartLevel();
     }
@@ -58,6 +63,7 @@ public class GameManager : Singleton<GameManager> {
             }
         }
 
+        UpdateSunset();
     }
 
     public void ShowTitle() {
@@ -123,6 +129,11 @@ public class GameManager : Singleton<GameManager> {
         int timeBonus = (int)Mathf.Floor((levelFinishTime - levelStartTime) / 10f - timeLimit) * 50;
         int deliveriesBonus = deliveries * 100;
         return levelBase + timeBonus + deliveriesBonus - damages;
+    }
+
+    private void UpdateSunset() {
+        var sunsetValue = Mathf.Clamp(1f - timeRemaining / TOTAL_TIME, 0f, 1f);
+        cameraMat.SetFloat("_Sunset", sunsetValue);
     }
 
 }
