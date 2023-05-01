@@ -52,6 +52,9 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private GameObject deliveryPackage;
 
+    private float shotCooldown = 1f;
+    private float currentShotCooldown = 1f;
+
     //Private movement variables
     private Rigidbody rb;
     private CharacterController characterController;
@@ -85,11 +88,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void OnShoot() {
+        if (currentShotCooldown > 0) {
+            return;
+        }
         var package = Instantiate(deliveryPackage, transform.position, Quaternion.identity);
         var packageRb = package.GetComponent<Rigidbody>();
         packageRb.velocity = velocity + packageFireVelocity;
         var rotationForce = packageRb.velocity.magnitude;
         packageRb.AddTorque(Random.onUnitSphere * rotationForce);
+        SoundSystem.Instance.PlayClip("yeet");
+        currentShotCooldown = shotCooldown;
     }
 
     // Using KBM controls, there's a specific button to walk.
@@ -100,6 +108,12 @@ public class PlayerController : MonoBehaviour {
         if (collision.gameObject.CompareTag("Obstacle")) {
             SoundSystem.Instance.PlayClip("crash");
             GameManager.Instance.ScoreCollision(collision.relativeVelocity.magnitude);
+        }
+    }
+
+    void Update() {
+        if (currentShotCooldown > 0) {
+            currentShotCooldown -= Time.deltaTime;
         }
     }
 

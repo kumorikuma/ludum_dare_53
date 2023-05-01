@@ -19,7 +19,6 @@ public class CarCollisionHandler : MonoBehaviour {
     // If using rigidbody collision
     void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Player")) {
-            Debug.Log($"Rigidbody collision! {collision.relativeVelocity.magnitude}");
             CarManager.Instance.CarCollision(gameObject);
         }
     }

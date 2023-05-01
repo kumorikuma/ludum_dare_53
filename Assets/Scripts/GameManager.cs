@@ -95,10 +95,16 @@ public class GameManager : Singleton<GameManager> {
         ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
     }
 
+    public void ScorePackage() {
+        deliveries += 1;
+        SoundSystem.Instance.PlayClip("deliverySuccess");
+    }
+
     private int ComputeEarnings() {
         int levelBase = 100;
         int timeBonus = (int)Mathf.Floor((levelFinishTime - levelStartTime) / 10f - timeLimit) * 50;
         int deliveriesBonus = deliveries * 100;
         return levelBase + timeBonus + deliveriesBonus - damages;
     }
+
 }
