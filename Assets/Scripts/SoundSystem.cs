@@ -20,6 +20,16 @@ public class SoundSystem : Singleton<SoundSystem> {
     [SerializeField]
     private AudioSource bgmAudioSource;
 
+    [Header("Engine sound")]
+    [SerializeField]
+    private float minEnginePitch = 1.0f;
+    [SerializeField]
+    private float maxEnginePitch = 2.0f;
+    [SerializeField]
+    private float minEngineVolume = 0.3f;
+    [SerializeField]
+    private float maxEngineVolume = 0.7f;
+
     // Private fields
     private Dictionary<string, AudioClip> clips;
 
@@ -36,8 +46,8 @@ public class SoundSystem : Singleton<SoundSystem> {
     }
 
     public void SetEngineLevel(float level) {
-        engineAudioSource.pitch = 0.5f + level * 2f;
-        engineAudioSource.volume = 0.2f + level * 0.4f;
+        engineAudioSource.pitch = minEnginePitch + level * (maxEnginePitch - minEnginePitch);
+        engineAudioSource.volume = minEngineVolume + level * (maxEngineVolume - minEngineVolume);
     }
 
 }

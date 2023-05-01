@@ -577,6 +577,10 @@ MonoBehaviour:
   sfxAudioSource: {fileID: 383596608}
   engineAudioSource: {fileID: 1920409451}
   bgmAudioSource: {fileID: 0}
+  minEnginePitch: 0.8
+  maxEnginePitch: 2.9
+  minEngineVolume: 0.3
+  maxEngineVolume: 0.7
 --- !u!1 &836699098
 GameObject:
   m_ObjectHideFlags: 0
