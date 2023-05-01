@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Palm Tree Level
   m_EditorClassIdentifier: 
   Name: Palm Trees
-  LevelLengthMeters: 4000
+  LevelLengthMeters: 2000
   OncomingTrafficLanes: 2
   FollowingTrafficLanes: 2
   ShouldSpawnCars: 1
@@ -21,12 +21,11 @@ MonoBehaviour:
   CarSpawnsPerSecFollowing: 0.4
   LaneSize: 3.7
   TileSize: 400
-  EntryTile: {fileID: 3346203251014832160, guid: 1219ea4492c88c0478f3bec645198afb, type: 3}
+  EntryTile: {fileID: 3473162068231774562, guid: 9b88f3237e619a44d8fc9a2e37a6fa36, type: 3}
   LevelTiles:
-  - {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
-  ExitTile: {fileID: 3346203251014832160, guid: c2f964a5a14acc542af36977569ee997, type: 3}
-  StopTile: {fileID: 3473162068231774562, guid: 83e1373eca1e6414eae650b28d7f04f8, type: 3}
-  TransitionTile: {fileID: 3473162068231774562, guid: 68a3e27876d07cb47a5453dcbadf4b2c, type: 3}
+  - {fileID: 3473162068231774562, guid: 74b5680642a6b624999ec5f818cfc496, type: 3}
+  ExitTile: {fileID: 3473162068231774562, guid: 9b88f3237e619a44d8fc9a2e37a6fa36, type: 3}
+  TransitionTile: {fileID: 3473162068231774562, guid: 18ef48d2731e4384daba592001988508, type: 3}
   DeliveryLocations:
   - 600
   - 1300

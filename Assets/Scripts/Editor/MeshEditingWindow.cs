@@ -9,6 +9,9 @@ using UnityEditor;
 public class MeshEditingWindow : EditorWindow {
     MeshFilter SourceMesh; // Mesh to edit and perform changes onto
     MeshFilter TargetMesh; // Mesh to use as data
+    GameObject PalmTreePrefab;
+    float xOffset = 15;
+    float gap = 25;
 
     [MenuItem("Custom/Mesh Editing")]
     public static void OpenWindow() {
@@ -33,6 +36,18 @@ public class MeshEditingWindow : EditorWindow {
         GUILayout.BeginVertical("GroupBox");
         if (GUILayout.Button("Recompute Normals")) {
             this.StartCoroutine(RecalculateNormals(SourceMesh));
+        }
+        GUILayout.EndVertical();
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("HelpBox");
+        GUILayout.Label("Level Gen");
+        PalmTreePrefab = EditorGUILayout.ObjectField("Palm Tree", PalmTreePrefab, typeof(GameObject), true) as GameObject;
+        xOffset = EditorGUILayout.Slider("X Offset", xOffset, 0, 50);
+        gap = EditorGUILayout.Slider("Gap", gap, 0, 100);
+        GUILayout.BeginVertical("GroupBox");
+        if (GUILayout.Button("Plant Trees")) {
+            this.StartCoroutine(PlantPalmTrees());
         }
         GUILayout.EndVertical();
         GUILayout.EndVertical();
@@ -63,6 +78,22 @@ public class MeshEditingWindow : EditorWindow {
         // See: https://forum.unity.com/threads/adding-new-blendshape-from-script-buggy-deformation-result-fixed.827187/ 
         targetMesh.mesh.RecalculateNormals();
         targetMesh.mesh.RecalculateTangents();
+        yield return null;
+    }
+
+    IEnumerator PlantPalmTrees() {
+        int numTrees = (int)(400.0f / gap) - 1;
+        for (int i = 0; i < numTrees; i++) {
+            float yOffset = i * gap + gap;
+            Vector3 position = new Vector3(xOffset, 0, yOffset);
+            GameObject tree = Instantiate(PalmTreePrefab, position, Quaternion.identity);
+            tree.transform.SetParent(SourceMesh.gameObject.transform);
+
+            position = new Vector3(-xOffset, 0, yOffset);
+            tree = Instantiate(PalmTreePrefab, position, Quaternion.identity);
+            tree.transform.localScale = new Vector3(-1, 1, 1);
+            tree.transform.SetParent(SourceMesh.gameObject.transform);
+        }
         yield return null;
     }
 }
