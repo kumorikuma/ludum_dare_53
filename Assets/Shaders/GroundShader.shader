@@ -15,6 +15,12 @@ Shader "Unlit/GroundShader"
         _GridThickness ("Grid Thickness", Range(0, 0.5)) = 0.1
         _LightVector("Directional Light Vector", Vector) = (0, -1, -1)
         _KeyLightBrightness("Key Light Brightness", Range(0, 1)) = 0.3
+        _ClearingLocation("Clearing Location", float) = 50
+        [Toggle(USE_CLEARING)] _HasClearingLocation("Has Clearing", Float) = 0
+        // InnerRadius where heightmap = 0
+        // OuterRadius where (OuterRadius - InnerRadius) = Blend
+        _BgGridDensity ("Bg Grid Density", Range(1, 100)) = 40
+        _BgGridThickness ("Bg Grid Thickness", Range(0, 0.5)) = 0.01
     }
     SubShader
     {
@@ -24,6 +30,7 @@ Shader "Unlit/GroundShader"
         Pass
         {
             CGPROGRAM
+            #pragma shader_feature USE_CLEARING
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
@@ -67,7 +74,9 @@ Shader "Unlit/GroundShader"
                 float4 vertex : SV_POSITION;
                 float3 posWorldSpace : VAR_POSITION_WS;
                 float height : VAR_HEIGHT;
+                float heightMultiplier : VAR_HEIGHT_MULTIPLIER;
                 float distanceToRoad : VAR_DISTANCE;
+                float distanceToClearing : VAR_DISTANCE2;
             };
 
             sampler2D _MainTex;
@@ -83,6 +92,10 @@ Shader "Unlit/GroundShader"
             float _GridThickness;
             float3 _LightVector;
             float _KeyLightBrightness;
+            float _BgGridDensity;
+            float _BgGridThickness;
+
+            float _ClearingLocation;
 
             v2f vert (appdata v)
             {
@@ -99,15 +112,26 @@ Shader "Unlit/GroundShader"
                     distanceToRoad = max(0, o.posWorldSpace.x - halfRoadWidth);
                 }
                 o.distanceToRoad = clamp(distanceToRoad / _HeightRoadBlend, 0, 1);
+
+                #ifdef USE_CLEARING
+                    float2 worldPos = float2(o.posWorldSpace.xz);
+                    float2 clearingPos = float2(halfRoadWidth + 10, _ClearingLocation);
+                    float2 distanceToClearingXY = abs(clearingPos - worldPos) * float2(0.55, 0.3); // Multiply distance in one axis to change the shape
+                    o.distanceToClearing = smoothstep(10, 15, length(distanceToClearingXY));
+                    o.heightMultiplier = o.distanceToRoad * o.distanceToClearing;
+                #else
+                    o.distanceToClearing = 0;
+                    o.heightMultiplier = o.distanceToRoad;
+                #endif
+            
                 float heightSample = tex2Dlod(_MainTex, float4(o.uv, 0, 0)).r + _HeightOffset; // [0, 1] -> [-1, 1]
+                o.height = heightSample * _HeightScale * o.heightMultiplier;
                 if ((o.posWorldSpace.x < -halfRoadWidth || o.posWorldSpace.x > halfRoadWidth) && heightSample > 0) {
-                    float heightScale = _HeightScale * o.distanceToRoad;
-                    v.vertex.y = v.vertex.y + heightSample * heightScale;
+                    v.vertex.y = v.vertex.y + o.height;
                 }
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 
-                o.height = heightSample;
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
@@ -115,12 +139,19 @@ Shader "Unlit/GroundShader"
             // Pallet:
             // Dark Blue: 20, 16, 57 <0.078, 0.063, 0.223>
             // Light Blue: 33, 24, 245 <0.130  0.133  0.961>
+            // Orchid: 0.85490  0.43922  0.83922
+            // Light Purple: 234,173,231 <0.914, 0.676, 0.902>
             fixed4 frag (v2f i) : SV_Target
             {
                 // Draw the road
                 float3 darkBlue = sRGBToLinear(float3(0.078, 0.063, 0.223));
                 float3 lightBlue = sRGBToLinear(float3(0.130, 0.133, 0.961));
+                float3 lightPurple = sRGBToLinear(float3(0.855, 0.439, 0.839));
                 float3 grey = sRGBToLinear(float3(1, 1, 1));
+                float3 red = float3(1, 0, 0);
+                float3 blue = float3(0, 0, 1);
+                float3 black = float3(0, 0, 0);
+
                 float halfRoadWidth = _RoadWidth / 2;
                 float halfGridThickness = _GridThickness / 2;
                 float gridStep = _RoadWidth / (_GridCells + 1);
@@ -155,6 +186,9 @@ Shader "Unlit/GroundShader"
                     }
                 }
 
+                // Visualize clearing
+                // return fixed4(lerp(0, 1, i.distanceToClearing), 0, 0, 1);
+
                 // Draw the terrain
                 if (i.height > 0) {
                     // Calculate normal
@@ -167,13 +201,23 @@ Shader "Unlit/GroundShader"
                     float heightR = tex2D(_MainTex, i.uv + float2(texelSize.x, 0)).r;
                     float heightB = tex2D(_MainTex, i.uv + float2(0, -texelSize.y)).r;
                     float heightT = tex2D(_MainTex, i.uv + float2(0, texelSize.y)).r;
-                    float3 N = computeNormals(heightT, heightR, heightB, heightL, height, _HeightScale * i.distanceToRoad);
+                    float3 N = computeNormals(heightT, heightR, heightB, heightL, height, _HeightScale * i.heightMultiplier);
 
                     float3 L = -normalize(_LightVector);
                     float NdotL = clamp(dot(N, L), 0, 1);
                     return fixed4(NdotL* grey * _KeyLightBrightness, 1);
                 } else {
-                    return fixed4(0, 0, 0, 1);
+                    #ifdef USE_CLEARING
+                        // Grid lines
+                        float2 fracA = frac(i.uv * _BgGridDensity);
+                        float2 fracB = frac((1 - i.uv) * _BgGridDensity);
+                        float a = pow(max(fracA.x, fracB.x), 1 / _BgGridThickness);
+                        float b = pow(max(fracA.y, fracB.y), 1 / _BgGridThickness);
+                        float3 gridCol = lerp(black, lightPurple.rgb, a + b);
+                        return fixed4(lerp(black, gridCol, 1 - i.distanceToClearing), 1);
+                    #else
+                        return fixed4(black, 1);
+                    #endif
                 }
 
                 // // // sample the texture
