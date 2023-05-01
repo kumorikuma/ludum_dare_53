@@ -17,23 +17,33 @@ public class TileManager : Singleton<TileManager> {
 
     private LevelData? currentLevel = null;
     private int currentTile = 0;
-    private Queue<GameObject> loadedTiles = new Queue<GameObject>();
+    private Queue<(int, GameObject)> loadedTiles = new Queue<(int, GameObject)>();
+    private HashSet<int> loadedTileIndices = new HashSet<int>();
 
     void Update() {
         if (currentLevel == null) {
             return;
         }
+
+        float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
         invisibleWallsObject.transform.position = new Vector3(
             invisibleWallsObject.transform.position.x,
             invisibleWallsObject.transform.position.y,
-            PlayerManager.Instance.PlayerController.transform.position.z
+            playerPosition
         );
+
+        float maxPosition = playerPosition + MaxViewDistance;
+        currentTile = (int)(playerPosition / currentLevel.TileSize);
+        int maxTileIdx = (int)(maxPosition / currentLevel.TileSize);
+        for (int i = currentTile; i <= maxTileIdx; i++) {
+            LoadTile(i);
+        }
     }
 
     public void LoadLevel(LevelData level) {
         currentTile = 0;
         currentLevel = level;
-        maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 1;
+        maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 2;
 
         // Unload current level
         while (loadedTiles.Count > 0) {
@@ -44,8 +54,12 @@ public class TileManager : Singleton<TileManager> {
             GameObject.Destroy(child.gameObject);
         }
 
-        // Load all tiles at once for now
-        for (int i = 0; i < level.Tiles.Count; i++) {
+        // Initial tiles
+        float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
+        float maxPosition = playerPosition + MaxViewDistance;
+        currentTile = (int)(playerPosition / currentLevel.TileSize);
+        int maxTileIdx = (int)(maxPosition / currentLevel.TileSize);
+        for (int i = currentTile; i <= maxTileIdx; i++) {
             LoadTile(i);
         }
 
@@ -68,14 +82,16 @@ public class TileManager : Singleton<TileManager> {
     }
 
     void LoadTile(int tileIdx) {
-        if (tileIdx >= currentLevel.Tiles.Count) {
-            Debug.Log($"[TileManager] Error loading tile: {tileIdx} >= tile counts for level '{currentLevel.name}'");
+        if (loadedTileIndices.Contains(tileIdx)) {
             return;
         }
 
-        GameObject newTileObj = Instantiate(currentLevel.Tiles[tileIdx], new Vector3(0, 0, currentTile * currentLevel.TileSize), Quaternion.identity);
+        Debug.Log($"[TileManager] Load Tile: {tileIdx}");
+        int levelTileIdx = tileIdx % currentLevel.Tiles.Count;
+        GameObject newTileObj = Instantiate(currentLevel.Tiles[levelTileIdx], new Vector3(0, 0, tileIdx * currentLevel.TileSize), Quaternion.identity);
         newTileObj.transform.parent = this.transform;
-        loadedTiles.Enqueue(newTileObj);
+        loadedTiles.Enqueue((tileIdx, newTileObj));
+        loadedTileIndices.Add(tileIdx);
 
         // Check if there is a delivery location that is within range of the tile
         float rangeMin = tileIdx * currentLevel.TileSize - 50;
@@ -95,14 +111,13 @@ public class TileManager : Singleton<TileManager> {
 
         if (loadedTiles.Count > maxLoadedTiles) {
             // TODO: Implement loading / unloading
-            // UnloadOldestTile();
+            UnloadOldestTile();
         }
-
-        currentTile++;
     }
 
     void UnloadOldestTile() {
-        GameObject oldTile = loadedTiles.Dequeue();
+        (int tileIdx, GameObject oldTile) = loadedTiles.Dequeue();
         Destroy(oldTile);
+        loadedTileIndices.Remove(tileIdx);
     }
 }

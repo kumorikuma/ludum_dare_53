@@ -15,7 +15,6 @@ public class LevelData : ScriptableObject {
 
     public float LaneSize;
     public int TileSize;
-    public bool RepeatTiles = true;
     public List<GameObject> Tiles;
     public List<float> DeliveryLocations; // Values should be between [0, LevelLengthMeters]
 
