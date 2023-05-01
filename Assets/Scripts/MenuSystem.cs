@@ -12,6 +12,10 @@ public class MenuSystem : Singleton<MenuSystem> {
         UIRouter.Instance.SwitchRoutes(UIRouter.Route.Title);
     }
 
+    public void ContinueUI() {
+        ReactUnityBridge.Instance.Continue();
+    }
+
     public void ShowDialogue(string conversationKey) {
         PlayerManager.Instance.SwitchActionMaps("menu");
         UIRouter.Instance.SwitchRoutes(UIRouter.Route.Dialogue);

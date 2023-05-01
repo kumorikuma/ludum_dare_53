@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useGlobals, useReactiveValue } from '@reactunity/renderer';
+import { useEffect } from 'react';
 
 import './index.scss';
 
@@ -52,6 +53,7 @@ conversations["ending_bad"] = [
 
 export default function Dialogue(): React.ReactNode {
     const globals = useGlobals();
+    const continueValue = useReactiveValue(globals.continue);
 
     const conversationKey: string = useReactiveValue(globals.conversationKey);
     const [index, setIndex] = useState(0);
@@ -68,6 +70,13 @@ export default function Dialogue(): React.ReactNode {
             Interop.GetType('ReactUnityBridge').DialogueFinished()
         }
     }
+    
+    useEffect(() => {
+        if (continueValue > 0) {
+            handleNext();
+            Interop.GetType('ReactUnityBridge').ResetContinue();
+        }
+    }, [continueValue, handleNext]);
 
     return <view className="dialogue-bar">
         <view className="content">

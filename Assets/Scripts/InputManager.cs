@@ -31,11 +31,16 @@ public class InputManager : MonoBehaviour {
         // There can also be a movement with a really large delta, whereas gamepad is capped out.
         // PlayerManager.Instance.CameraController.OnLook(value.Get<Vector2>() * MouseLookSensitivity);
     }
+
+    // [Menu]
+    void OnContinue() {
+        MenuSystem.Instance.ContinueUI();
+    }
+
     void OnPause() {
         MenuSystem.Instance.PauseGame();
     }
 
-    // [Menu]
     void OnUnpause() {
         MenuSystem.Instance.UnpauseGame();
     }

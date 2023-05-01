@@ -10,6 +10,8 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
 
     public ReactiveValue<string> route = new ReactiveValue<string>();
 
+    public ReactiveValue<int> continueValue = new ReactiveValue<int>();
+
     // Conversation
     public ReactiveValue<string> conversationKey = new ReactiveValue<string>();
 
@@ -31,6 +33,9 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
         ReactRendererBase reactRenderer = GetComponentInChildren<ReactUnity.UGUI.ReactRendererUGUI>();
         Router.OnRouteUpdate += OnRouteUpdate;
         reactRenderer.Globals["route"] = route;
+
+        // To advance the UI
+        reactRenderer.Globals["continue"] = continueValue;
 
         // Dialog
         reactRenderer.Globals["conversationKey"] = conversationKey;
@@ -91,4 +96,11 @@ public class ReactUnityBridge : Singleton<ReactUnityBridge> {
         Debug.Log("Interop Test Works");
     }
 
+    // Kinda hacky
+    public void Continue() {
+        continueValue.Value = 1;
+    }
+    public static void ResetContinue() {
+        ReactUnityBridge.Instance.continueValue.Value = 0;
+    }
 }
