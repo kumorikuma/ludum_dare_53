@@ -5,6 +5,7 @@ Shader "Unlit/Flat Sky"
         _MainTex ("Texture", 2D) = "white" {}
         _SunTex ("Texture", 2D) = "white" {}
         _Gamma("Gamma", Range(1, 2.2)) = 1
+        _Sunset ("Sunset", Range(0, 1)) = 0
     }
     SubShader
     {
@@ -19,11 +20,7 @@ Shader "Unlit/Flat Sky"
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
- 
-            float _Gamma;
-            fixed4 sRGBToLinear(fixed4 srgbColor) {
-                return pow(srgbColor, _Gamma);
-            }
+
 
             struct appdata
             {
@@ -43,13 +40,21 @@ Shader "Unlit/Flat Sky"
             float4 _MainTex_ST;
             sampler2D _SunTex;
             float4 _SunTex_ST;
- 
+            float _Sunset;
+            float _Gamma;
+            
+            fixed4 sRGBToLinear(fixed4 srgbColor) {
+                float gamma = lerp(_Gamma, 2.2, _Sunset);
+                return pow(srgbColor, gamma);
+            }
+
             v2f vert(appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.uv2 = TRANSFORM_TEX(v.uv, _SunTex);
+                o.uv2.y = lerp(o.uv2.y, o.uv2.y + 0.6, _Sunset);
                 #if defined(UNITY_REVERSED_Z)
                 // when using reversed-Z, make the Z be just a tiny
                 // bit above 0.0
