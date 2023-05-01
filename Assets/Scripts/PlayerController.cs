@@ -58,6 +58,11 @@ public class PlayerController : MonoBehaviour {
         return velocity.z;
     }
 
+    public void Reset() {
+        var position = transform.position;
+        position.z = 0;
+        transform.position = position;
+    }
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();

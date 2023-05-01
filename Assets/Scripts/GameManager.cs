@@ -15,16 +15,20 @@ public class GameManager : Singleton<GameManager> {
     private int money;
 
     // Level stats
+    private bool levelInProgress = false;
+    private int levelIndex;
     private float levelStartTime;
     private float levelFinishTime;
+    private float timeLimit;
     private int damages;
+    private int deliveries;
 
     void Start() {
         ShowTitle();
     }
 
     void Update() {
-        if (LevelManager.Instance.CurrentLevel == null) {
+        if (!levelInProgress) {
             return;
         }
 
@@ -48,34 +52,52 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void StartGame() {
-        MenuSystem.Instance.ShowDialogue("level1");
+        MenuSystem.Instance.ShowDialogue("game_intro");
     }
 
     public void StartLevel() {
+        levelInProgress = true;
+        levelIndex += 1;
         levelStartTime = Time.time;
         damages = 0;
 
         ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
 
         // LevelManager.Instance.LoadBoTestLevel();
-        LevelManager.Instance.LoadLevel(1);
+        LevelManager.Instance.LoadLevel(levelIndex);
         Debug.Log($"Level Start!");
 
-        PlayerManager.Instance.SwitchActionMaps("gameplay");
-        UIRouter.Instance.SwitchRoutes(UIRouter.Route.Game);
+        playerController.Reset();
+
+        MenuSystem.Instance.UnpauseGame();
     }
 
     public void FinishLevel() {
+        levelInProgress = false;
         levelFinishTime = Time.time;
         var timespan = TimeSpan.FromSeconds(levelFinishTime - levelStartTime);
 
-        // TODO: Show score screen
+        // Show score screen
         Debug.Log($"Level Finished! Time {timespan.ToString(@"hh\:mm\:ss")}");
-        // LevelManager.Instance.UnloadCurrentLevel();
+        // TODO: Get time limit and delivery goal from LevelData
+        var earnings = ComputeEarnings();
+        money += earnings;
+        MenuSystem.Instance.ShowLevelEnd(levelIndex, levelFinishTime - levelStartTime, 60, damages, deliveries, 0, earnings);
+    }
+
+    public void NextLevel() {
+        StartLevel();
     }
 
     public void ScoreCollision(float collisionSpeed) {
         damages += 1 + (int)collisionSpeed;
         ReactUnityBridge.Instance.UpdateDamages($"Damages: ${damages}");
+    }
+
+    private int ComputeEarnings() {
+        int levelBase = 100;
+        int timeBonus = (int)Mathf.Floor((levelFinishTime - levelStartTime) / 10f - timeLimit) * 50;
+        int deliveriesBonus = deliveries * 100;
+        return levelBase + timeBonus + deliveriesBonus - damages;
     }
 }

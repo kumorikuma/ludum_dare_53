@@ -18,7 +18,9 @@ public class MenuSystem : Singleton<MenuSystem> {
         ReactUnityBridge.Instance.conversationKey.Value = conversationKey;
     }
 
-    public void ShowLevelEnd() {
+    public void ShowLevelEnd(int level, float time, float timeLimit, int damages, int deliveries, int deliveriesGoal, int earnings) {
+        ReactUnityBridge.Instance.UpdateScores(level, time, timeLimit, damages, deliveries, deliveriesGoal, earnings);
+
         PlayerManager.Instance.SwitchActionMaps("menu");
         UIRouter.Instance.SwitchRoutes(UIRouter.Route.LevelEnd);
     }
