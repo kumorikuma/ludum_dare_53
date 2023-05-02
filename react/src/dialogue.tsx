@@ -15,7 +15,7 @@ conversations["game_intro"] = [
     { bg: "", speaker: "Handler", text: "You got the package? Good." },
     { bg: "", speaker: "Handler", text: "You must get it to the Chairman before sundown, which is... in 3 minutes. You got that?" },
     { bg: "", speaker: "Agent", text: "3 Minutes?!" },
-    { bg: "", speaker: "Handler", text: "Yeah, so step on the gas. And careful with the company car -- we'll be deducting the repair fees from your pay." },
+    { bg: "", speaker: "Handler", text: "Yeah, so step on the gas. \nAnd careful with the company car -- we'll be deducting the repair fees from your pay." },
     { bg: "", speaker: "", text: "Use [W] [A] [S] [D] keys to move." }
 ];
 // conversations["boost_intro"] = [
@@ -26,7 +26,7 @@ conversations["game_intro"] = [
 conversations["delivery_intro"] = [
     { bg: "", speaker: "Handler", text: "Buddy, could you be going any slower?! At this rate you're never gonna make it!" },
     { bg: "", speaker: "Agent", text: "What do you want me to do? The car only goes so fast!" },
-    { bg: "", speaker: "Handler", text: "Hey, don't worry. \nYou know how there's a deadly disease spreading around the city, and our corporation has a monopoly on the cure?" },
+    { bg: "", speaker: "Handler", text: "Hey, don't worry. You know how there's a deadly disease spreading around the city, \nand our corporation has a monopoly on the cure?" },
     { bg: "", speaker: "Agent", text: "And that's... not worrying." },
     { bg: "", speaker: "Handler", text: "I worked out a deal with the folks at R&D. \nThey said they'll make your car faster if you help them deliver the cures." },
     { bg: "", speaker: "Agent", text: "What? How does that work?" },
@@ -34,8 +34,8 @@ conversations["delivery_intro"] = [
     { bg: "", speaker: "", text: "Press [E] to deliver a cure. Each successful delivery boosts your max speed." },
 ];
 conversations["bonus_speed"] = [
-    { bg: "", speaker: "Handler", text: "The R&D folks were impressed by your delivery speed! They decided to give you a bit of bonus speed." },
-    { bg: "", speaker: "Handler", text: "Keep making the deliveries to boost your speed!" },
+    { bg: "", speaker: "Handler", text: "The R&D folks were impressed by your deliveries! They decided to give you a bit more speed." },
+    { bg: "", speaker: "Handler", text: "Keep making the deliveries to go faster!" },
 ];
 conversations["jump_intro"] = [
     { bg: "", speaker: "Handler", text: "Looks like there's a lot of traffic ahead." },

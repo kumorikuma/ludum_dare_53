@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export default function TitleScreen(): React.ReactNode {
     const globals = useGlobals();
-    const continueValue = useReactiveValue(globals.continue);
+    const continueValue: number = useReactiveValue(globals.continue);
     useEffect(() => {
         if (continueValue > 0) {
             Interop.GetType('ReactUnityBridge').ResetContinue();
@@ -14,7 +14,7 @@ export default function TitleScreen(): React.ReactNode {
     }, [continueValue]);
 
     return <view className="title-screen">
-        <h1>【Ｎｉｇｈｔ　Ｄｅｌｉｖｅｒｙ】</h1>
+        <h1>【Ｓｕｎｓｅｔ　Ｄｅｌｉｖｅｒｙ】</h1>
         <button onClick={() =>
             Interop.GetType('ReactUnityBridge').StartGameClicked()
         }>
