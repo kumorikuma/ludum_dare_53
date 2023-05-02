@@ -17,7 +17,7 @@ MonoBehaviour:
   OncomingTrafficLanes: 2
   FollowingTrafficLanes: 2
   ShouldSpawnCars: 1
-  CarSpawnsPerSecOncoming: 0.2
+  CarSpawnsPerSecOncoming: 0.001
   CarSpawnsPerSecFollowing: 0.5
   LaneSize: 3.7
   TileSize: 400

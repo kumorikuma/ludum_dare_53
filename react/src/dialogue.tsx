@@ -49,14 +49,14 @@ conversations["jump_intro"] = [
 //     { bg: "", speaker: "", text: "Your car no longer has a speed limit." },
 // ];
 conversations["ending_good"] = [
-    { bg: "ending_bg1", speaker: "Agent", text: "Mr. Chairman? I have the delivery for you." },
-    { bg: "ending_bg1", speaker: "Chairman", text: "Ah! Ice cream from The Scoop. A special treat!" },
-    { bg: "ending_bg1", speaker: "Chairman", text: "And it hasn't melted yet. Well done agent. We'll give you a promotion." },
+    { bg: "end_1", speaker: "Agent", text: "Mr. Chairman? I have the delivery for you." },
+    { bg: "good_end", speaker: "Chairman", text: "Ah! Ice cream from The Scoop. A special treat!" },
+    { bg: "good_end", speaker: "Chairman", text: "And it hasn't melted yet. Well done agent. We'll give you a promotion." },
 ];
 conversations["ending_bad"] = [
-    { bg: "ending_bg1", speaker: "Agent", text: "Mr. Chairman? Express delivery for you." },
-    { bg: "ending_bg1", speaker: "Chairman", text: "Ah! Ice cream from The Scoop. A special treat!" },
-    { bg: "ending_bg1", speaker: "Chairman", text: "What is this? It's all MELTED! Have this guy fired!" },
+    { bg: "end_1", speaker: "Agent", text: "Mr. Chairman? Express delivery for you." },
+    { bg: "bad_end", speaker: "Chairman", text: "Ah! Ice cream from The Scoop. A special treat!" },
+    { bg: "bad_end", speaker: "Chairman", text: "What is this? It's all MELTED! Have this guy fired!" },
 ];
 
 export default function Dialogue(): React.ReactNode {

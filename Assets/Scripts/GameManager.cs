@@ -39,6 +39,13 @@ public class GameManager : Singleton<GameManager> {
 
         ResetGame();
         // StartLevel();
+
+        if (DEVELOPMENT_MODE) {
+            PlayerManager.Instance.PlayerController.DeliveryUnlocked = true;
+            PlayerManager.Instance.PlayerController.JumpUnlocked = true;
+            PlayerManager.Instance.PlayerController.SpeedUnlocked = true;
+            PlayerManager.Instance.PlayerController.HyperspeedUnlocked = true;
+        }
     }
 
     void Update() {

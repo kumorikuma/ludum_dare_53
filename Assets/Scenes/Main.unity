@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18348955, g: 0.22905543, b: 0.3057793, a: 1}
+  m_IndirectSpecularColor: {r: 0.18348955, g: 0.2290554, b: 0.30578044, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -342,6 +342,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 961783}
     m_Modifications:
+    - target: {fileID: 1976600809, guid: b06f3cf3474de2249b9403f776fa7a5e, type: 3}
+      propertyPath: TowerPrefab
+      value: 
+      objectReference: {fileID: 3186026920150297380, guid: ec6fdbf882ab5c44689717f0e8081215, type: 3}
     - target: {fileID: 1976600809, guid: b06f3cf3474de2249b9403f776fa7a5e, type: 3}
       propertyPath: InvisibleWallsObject
       value: 
