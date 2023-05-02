@@ -10,6 +10,9 @@ public class TileManager : Singleton<TileManager> {
     [NonNullField]
     public GameObject DeliveryLocationPrefab;
 
+    [NonNullField]
+    public GameObject TowerPrefab;
+
     public int MaxViewDistance = 800;
     private int maxLoadedTiles;
 
@@ -25,6 +28,10 @@ public class TileManager : Singleton<TileManager> {
     private float stopLocation;
 
     private int levelsLoaded = 0;
+
+    private GameObject TowerObject = null;
+    private int towerOffset = 40;
+    private float distanceToTower = 0;
 
     protected override void Awake() {
         base.Awake();
@@ -48,6 +55,16 @@ public class TileManager : Singleton<TileManager> {
         );
 
         MaybeLoadMoreTiles();
+
+        // Hack for big building
+        if (TowerObject != null) {
+            // LERP the y pos
+            float t = (1 - (LevelManager.Instance.GetEndPosition() - playerPosition) / distanceToTower);
+            TowerObject.transform.position = new Vector3(
+                TowerObject.transform.position.x,
+                Mathf.Lerp(-550.0f, 0, t),
+                TowerObject.transform.position.z);
+        }
     }
 
     public float GetLevelOffset() {
@@ -73,7 +90,7 @@ public class TileManager : Singleton<TileManager> {
         levelsLoaded += 1;
         maxLoadedTile = maxLoadedTile + maxLoadedTileForLevel;
         levelOffset = (maxLoadedTile + 1) * level.TileSize;
-        Debug.Log($"Load Level {level.name} with offset {levelOffset}. MaxLoadedTile {maxLoadedTile}");
+        Debug.Log($"Load Level {level.Name} with offset {levelOffset}. MaxLoadedTile {maxLoadedTile}");
         currentTile = 0;
         currentLevel = level;
         maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 3;
@@ -97,6 +114,12 @@ public class TileManager : Singleton<TileManager> {
             leftRail.position.y,
             leftRail.position.z
         );
+
+        // Hack for big building
+        if (level.name == "Last Level") {
+            TowerObject = Instantiate(TowerPrefab, new Vector3(0, 0, LevelManager.Instance.GetEndPosition()), Quaternion.identity);
+            distanceToTower = LevelManager.Instance.GetEndPosition() - PlayerManager.Instance.PlayerController.transform.position.z;
+        }
     }
 
     void LoadTile(int tileIdx) {
