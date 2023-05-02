@@ -16,7 +16,7 @@ conversations["game_intro"] = [
     { bg: "", speaker: "Handler", text: "You must get it to the Chairman before sundown, which is... in 3 minutes. You got that?" },
     { bg: "", speaker: "Agent", text: "3 Minutes?!" },
     { bg: "", speaker: "Handler", text: "Yeah, so step on the gas. And careful with the company car -- we'll be deducting the repair fees from your pay." },
-    { bg: "", speaker: "Handler", text: "Use [W] [A] [S] [D] keys to move." }
+    { bg: "", speaker: "", text: "Use [W] [A] [S] [D] keys to move." }
 ];
 // conversations["boost_intro"] = [
 //     { bg: "", speaker: "Handler", text: "Buddy, could you be going any slower?! At this rate you're never gonna make it!" },
@@ -32,6 +32,10 @@ conversations["delivery_intro"] = [
     { bg: "", speaker: "Agent", text: "What? How does that work?" },
     { bg: "", speaker: "Handler", text: "One of those 'over-the-air-update' thing. \nAnyways, they'll 3D print the cures in your car, just yeet those at hospitals along the way." },
     { bg: "", speaker: "", text: "Press [E] to deliver a cure. Each successful delivery boosts your max speed." },
+];
+conversations["bonus_speed"] = [
+    { bg: "", speaker: "Handler", text: "The R&D folks were impressed by your delivery speed! They decided to give you a bit of bonus speed." },
+    { bg: "", speaker: "Handler", text: "Keep making the deliveries to boost your speed!" },
 ];
 conversations["jump_intro"] = [
     { bg: "", speaker: "Handler", text: "Looks like there's a lot of traffic ahead." },

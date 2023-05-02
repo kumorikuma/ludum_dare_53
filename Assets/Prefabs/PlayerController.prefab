@@ -52,7 +52,7 @@ MonoBehaviour:
   Animator: {fileID: 1196071173308045190}
   Acceleration: 30
   SideAcceleration: 30
-  JumpForce: 20
+  JumpForce: 12
   DefaultSpeed: 30
   MaxSpeed: 60
   MinSpeed: 0

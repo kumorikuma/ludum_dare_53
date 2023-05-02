@@ -89,7 +89,6 @@ public class GameManager : Singleton<GameManager> {
         // playerController.Reset();
 
         MenuSystem.Instance.UnpauseGame();
-        SoundSystem.Instance.PlayLevelMusic(levelIndex);
     }
 
     public void FinishLevel() {
@@ -123,6 +122,7 @@ public class GameManager : Singleton<GameManager> {
                 break;
             case 1:
                 // Intro dialogue
+                SoundSystem.Instance.PlayLevelMusic(1);
                 MenuSystem.Instance.ShowDialogue("game_intro");
                 break;
             case 2:
@@ -140,14 +140,25 @@ public class GameManager : Singleton<GameManager> {
                 break;
             case 5:
                 // Level 3 dialogue
-                MenuSystem.Instance.ShowDialogue("jump_intro");
-                playerController.JumpUnlocked = true;
+                MenuSystem.Instance.ShowDialogue("bonus_speed");
+                playerController.BonusSpeed += 30;
                 break;
             case 6:
                 // Level 3
+                SoundSystem.Instance.PlayLevelMusic(2);
                 StartLevel(3);
                 break;
             case 7:
+                // Level 4
+                MenuSystem.Instance.ShowDialogue("jump_intro");
+                playerController.JumpUnlocked = true;
+                break;
+            case 8:
+                // Level 4
+                SoundSystem.Instance.PlayLevelMusic(3);
+                StartLevel(4);
+                break;
+            case 9:
                 // Game end
                 if (timeRemaining <= 0) {
                     MenuSystem.Instance.ShowDialogue("ending_bad");
@@ -158,7 +169,7 @@ public class GameManager : Singleton<GameManager> {
                 SoundSystem.Instance.PlayLevelMusic(0);
                 SoundSystem.Instance.SetVolume(0.5f);
                 break;
-            case 8:
+            case 10:
                 // Score screen
                 MenuSystem.Instance.ShowLevelEnd(levelIndex, timeRemaining, 0, damages, deliveries, 0, money);
                 break;
@@ -187,7 +198,7 @@ public class GameManager : Singleton<GameManager> {
         money += 100;
         deliveries += 1;
         SoundSystem.Instance.PlayClip("deliverySuccess");
-        playerController.BonusSpeed += 10;
+        playerController.BonusSpeed += 5;
     }
 
     private int ComputeEarnings() {
@@ -203,7 +214,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     private void UpdateHud() {
-        ReactUnityBridge.Instance.UpdateHud(timeRemaining, money, distanceTravelled + distanceTravelledThisLevel, totalDistance);
+        ReactUnityBridge.Instance.UpdateHud(timeRemaining, deliveries, distanceTravelled + distanceTravelledThisLevel, totalDistance);
     }
 
 }

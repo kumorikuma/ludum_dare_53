@@ -13,8 +13,8 @@ export default function Hud(): React.ReactNode {
     return <view className="game-hud">
         <view className="top-bar">
             <div className="left">
-                <h3>SCORE</h3>
-                <h2>{`$${money}`}</h2>
+                <h3>DELIVERED</h3>
+                <h2>{`${money}`}</h2>
             </div>
             <div className="center">
                 <h3>TIME UNTIL SUNSET</h3>
