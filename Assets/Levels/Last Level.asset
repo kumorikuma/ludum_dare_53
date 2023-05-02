@@ -17,8 +17,8 @@ MonoBehaviour:
   OncomingTrafficLanes: 2
   FollowingTrafficLanes: 2
   ShouldSpawnCars: 1
-  CarSpawnsPerSecOncoming: 0.001
-  CarSpawnsPerSecFollowing: 0.5
+  CarSpawnsPerSecOncoming: 0.3
+  CarSpawnsPerSecFollowing: 0.4
   LaneSize: 3.7
   TileSize: 400
   EntryTile: {fileID: 3473162068231774562, guid: 25fdee2c833847c4f9d23f6016cda2c5, type: 3}
