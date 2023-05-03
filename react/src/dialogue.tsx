@@ -16,7 +16,7 @@ conversations["game_intro"] = [
     { bg: "", speaker: "Handler", text: "You must get it to the Chairman before sundown, which is... in 3 minutes. You got that?" },
     { bg: "", speaker: "Agent", text: "3 Minutes?!" },
     { bg: "", speaker: "Handler", text: "Yeah, so step on the gas. \nAnd careful with the company car -- we'll be deducting the repair fees from your pay." },
-    { bg: "", speaker: "", text: "Use [W] [A] [S] [D] keys to move." }
+    { bg: "", speaker: "", text: "Use [A] and [D] to move left and right. Press [W] to speed up and [S] to slow down." }
 ];
 // conversations["boost_intro"] = [
 //     { bg: "", speaker: "Handler", text: "Buddy, could you be going any slower?! At this rate you're never gonna make it!" },
@@ -49,11 +49,13 @@ conversations["jump_intro"] = [
 //     { bg: "", speaker: "", text: "Your car no longer has a speed limit." },
 // ];
 conversations["ending_good"] = [
+    { bg: "", speaker: "Agent", text: "Looks like I made it..." },
     { bg: "end_1", speaker: "Agent", text: "Mr. Chairman? I have the delivery for you." },
     { bg: "good_end", speaker: "Chairman", text: "Ah! Ice cream from The Scoop. A special treat!" },
     { bg: "good_end", speaker: "Chairman", text: "And it hasn't melted yet. Well done agent. We'll give you a promotion." },
 ];
 conversations["ending_bad"] = [
+    { bg: "", speaker: "Agent", text: "Guess I couldn't make it in time..." },
     { bg: "end_1", speaker: "Agent", text: "Mr. Chairman? Express delivery for you." },
     { bg: "bad_end", speaker: "Chairman", text: "Ah! Ice cream from The Scoop. A special treat!" },
     { bg: "bad_end", speaker: "Chairman", text: "What is this? It's all MELTED! Have this guy fired!" },
