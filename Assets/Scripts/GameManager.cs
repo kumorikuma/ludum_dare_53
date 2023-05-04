@@ -13,6 +13,9 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     PlayerController playerController;
 
+    [NonNullField]
+    public GameObject TitleCardObject;
+
     // Game stats
     private int gameProgress = 0;
     private int money;
@@ -94,6 +97,7 @@ public class GameManager : Singleton<GameManager> {
     public void ShowTitle() {
         LevelManager.Instance.LoadLevel(0);
         MenuSystem.Instance.ShowTitle();
+        TitleCardObject.SetActive(true);
     }
 
     public void StartLevel(int level) {
@@ -132,6 +136,7 @@ public class GameManager : Singleton<GameManager> {
                 // Title
                 break;
             case 1:
+                TitleCardObject.SetActive(false);
                 // Intro dialogue
                 SoundSystem.Instance.PlayLevelMusic(1);
                 MenuSystem.Instance.ShowDialogue("game_intro");

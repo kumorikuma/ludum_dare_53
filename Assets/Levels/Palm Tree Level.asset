@@ -21,10 +21,10 @@ MonoBehaviour:
   CarSpawnsPerSecFollowing: 0.2
   LaneSize: 3.7
   TileSize: 400
-  EntryTile: {fileID: 3473162068231774562, guid: 9b88f3237e619a44d8fc9a2e37a6fa36, type: 3}
+  EntryTile: {fileID: 3473162068231774562, guid: de6ff5bc4795aa0429740a6d5995ce23, type: 3}
   LevelTiles:
-  - {fileID: 3473162068231774562, guid: 74b5680642a6b624999ec5f818cfc496, type: 3}
-  ExitTile: {fileID: 3473162068231774562, guid: 9b88f3237e619a44d8fc9a2e37a6fa36, type: 3}
+  - {fileID: 573407610693469204, guid: 4469eda9fc945d847a60da412af2b119, type: 3}
+  ExitTile: {fileID: 3473162068231774562, guid: de6ff5bc4795aa0429740a6d5995ce23, type: 3}
   TransitionTile: {fileID: 3473162068231774562, guid: 18ef48d2731e4384daba592001988508, type: 3}
   DeliveryLocations:
   - 600

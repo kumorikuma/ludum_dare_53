@@ -13975,7 +13975,7 @@ function createMemoryRouter(routes, opts) {
 
 //# sourceMappingURL=index.js.map
 ;// CONCATENATED MODULE: ./src/title.tsx
-function TitleScreen(){var globals=useGlobals();var continueValue=useReactiveValue(globals["continue"]);(0,react.useEffect)(function(){if(continueValue>0){Interop.GetType('ReactUnityBridge').ResetContinue();Interop.GetType('ReactUnityBridge').StartGameClicked();}},[continueValue]);return/*#__PURE__*/(0,jsx_runtime.jsxs)("view",{className:"title-screen",children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"\u3010\uFF33\uFF55\uFF4E\uFF53\uFF45\uFF54\u3000\uFF24\uFF45\uFF4C\uFF49\uFF56\uFF45\uFF52\uFF59\u3011"}),/*#__PURE__*/(0,jsx_runtime.jsx)("button",{onClick:function onClick(){return Interop.GetType('ReactUnityBridge').StartGameClicked();},children:"START"})]});}
+function TitleScreen(){var globals=useGlobals();var continueValue=useReactiveValue(globals["continue"]);(0,react.useEffect)(function(){if(continueValue>0){Interop.GetType('ReactUnityBridge').ResetContinue();Interop.GetType('ReactUnityBridge').StartGameClicked();}},[continueValue]);return/*#__PURE__*/(0,jsx_runtime.jsxs)("view",{className:"title-screen",children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"\u3000\u3000\u3000"}),/*#__PURE__*/(0,jsx_runtime.jsx)("button",{onClick:function onClick(){return Interop.GetType('ReactUnityBridge').StartGameClicked();},children:"START"})]});}
 ;// CONCATENATED MODULE: ./src/pause.tsx
 function Pause(){return/*#__PURE__*/(0,jsx_runtime.jsx)("view",{className:"pause",children:/*#__PURE__*/(0,jsx_runtime.jsx)("view",{className:"content",children:/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{className:"title",children:"PAUSED"})})});}
 ;// CONCATENATED MODULE: ./src/level_start.tsx

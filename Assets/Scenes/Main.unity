@@ -207,6 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DEVELOPMENT_MODE: 0
   playerController: {fileID: 1404053498}
+  TitleCardObject: {fileID: 1328707310}
   DistanceTravelled_: 0
   DistanceTravelledThisLevel_: 0
   TotalDistance_: 0
@@ -1243,6 +1244,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f86c8ff127a523f498e654a93bd0ccca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1328707310 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8936279808574220071, guid: 9016306ee4ba4c64eb5d879d2d282e7c, type: 3}
+  m_PrefabInstance: {fileID: 1410610129}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1404053498 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1196071173308045187, guid: 9016306ee4ba4c64eb5d879d2d282e7c, type: 3}

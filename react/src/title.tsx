@@ -14,7 +14,8 @@ export default function TitleScreen(): React.ReactNode {
     }, [continueValue]);
 
     return <view className="title-screen">
-        <h1>【Ｓｕｎｓｅｔ　Ｄｅｌｉｖｅｒｙ】</h1>
+        <h1>　　　</h1>
+        {/*<h1>【Ｓｕｎｓｅｔ　Ｄｅｌｉｖｅｒｙ】</h1>*/}
         <button onClick={() =>
             Interop.GetType('ReactUnityBridge').StartGameClicked()
         }>
