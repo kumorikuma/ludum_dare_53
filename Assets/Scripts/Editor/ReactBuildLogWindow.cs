@@ -6,11 +6,11 @@ public class ReactBuildLogWindow : EditorWindow {
 
     [MenuItem("React/Build Log")]
     public static void ShowWindow() {
-        GetWindow<ReactBuildLogWindow>("Build Log");
+        GetWindow<ReactBuildLogWindow>("React Build Log");
     }
 
     private void OnGUI() {
-        EditorGUILayout.LabelField("Build Log", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("React Build Log", EditorStyles.boldLabel);
         EditorGUILayout.TextArea(BuildLog, GUILayout.ExpandHeight(true));
     }
 
