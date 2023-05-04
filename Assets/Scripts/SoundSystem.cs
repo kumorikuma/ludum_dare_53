@@ -35,6 +35,8 @@ public class SoundSystem : Singleton<SoundSystem> {
     // Private fields
     private Dictionary<string, AudioClip> clips;
     private float overallVolume = 1.0f;
+    private float sfxVolume;
+    private float sfxPitch;
 
     void Start() {
         // Move sounds from the array into a hashmap
@@ -42,6 +44,14 @@ public class SoundSystem : Singleton<SoundSystem> {
         foreach (var clip in audioClips) {
             clips[clip.name] = clip.clip;
         }
+
+        sfxVolume = sfxAudioSource.volume;
+        sfxPitch = sfxAudioSource.pitch;
+    }
+
+    void ResetSfxAudioSource() {
+        sfxAudioSource.volume = sfxVolume;
+        sfxAudioSource.pitch = sfxPitch;
     }
 
     public void PlayClip(string name) {
@@ -49,7 +59,13 @@ public class SoundSystem : Singleton<SoundSystem> {
             Debug.LogError($"SFX '{name}' not found");
             return;
         }
-        sfxAudioSource.PlayOneShot(clips[name]);
+        if (name == "crash") {
+            sfxAudioSource.pitch = 0.5f;
+            sfxAudioSource.PlayOneShot(clips[name], 0.3f);
+        } else {
+            sfxAudioSource.PlayOneShot(clips[name]);
+        }
+        ResetSfxAudioSource();
     }
 
     public void PlayLevelMusic(int levelIndex) {

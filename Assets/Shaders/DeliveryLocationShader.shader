@@ -33,6 +33,7 @@ Shader "Custom/DeliveryLocationShader" {
             v2f vert(appdata v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                o.barycentric = float3(0, 0, 0);
                 return o;
             }
 

@@ -36,6 +36,17 @@ public class LevelManager : Singleton<LevelManager> {
     public List<LevelData> Levels = new List<LevelData>();
     public LevelData CurrentLevel;
 
+    // Debugging
+    public float LevelEnd;
+    public float PlayerPosition;
+    public float LevelOffset;
+
+    void Update() {
+        LevelEnd = GetEndPosition();
+        PlayerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
+        LevelOffset = GetLevelOffset();
+    }
+
     public float GetEndPosition() {
         return CurrentLevel.GetLevelLengthMeters() + GetLevelOffset();
     }
@@ -46,7 +57,8 @@ public class LevelManager : Singleton<LevelManager> {
 
     public float GetTotalDistance() {
         var total = 0f;
-        for (int i = 0; i < Levels.Count; i++) {
+        // Skip the title level
+        for (int i = 1; i < Levels.Count; i++) {
             total += Levels[i].GetLevelLengthMeters();
         }
         return total;

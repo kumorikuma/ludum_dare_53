@@ -1,0 +1,7 @@
+{
+  "name": "Editor",
+  "rootNamespace": "",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": []
+}

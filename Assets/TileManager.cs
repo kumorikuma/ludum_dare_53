@@ -41,6 +41,24 @@ public class TileManager : Singleton<TileManager> {
         }
     }
 
+    public void Reset() {
+        currentLevel = null;
+        maxLoadedTileForLevel = -1;
+        levelOffset = 0;
+        maxLoadedTile = 0;
+        levelsLoaded = 0;
+        distanceToTower = 0;
+        if (TowerObject != null) {
+            Destroy(TowerObject);
+            TowerObject = null;
+        }
+        // Unload all tiles
+        while (loadedTiles.Count > 0) {
+            UnloadOldestTile();
+        }
+        loadedTileIndices = new HashSet<int>();
+    }
+
     void Update() {
         if (currentLevel == null) {
             return;
@@ -59,7 +77,8 @@ public class TileManager : Singleton<TileManager> {
         // Hack for big building
         if (TowerObject != null) {
             // LERP the y pos
-            float t = (1 - (LevelManager.Instance.GetEndPosition() - playerPosition) / distanceToTower);
+            float endPosition = LevelManager.Instance.GetEndPosition() - 400;
+            float t = (1 - Mathf.Clamp(0, (endPosition - playerPosition) / distanceToTower, 1));
             TowerObject.transform.position = new Vector3(
                 TowerObject.transform.position.x,
                 Mathf.Lerp(-550.0f, 0, t),
@@ -73,7 +92,6 @@ public class TileManager : Singleton<TileManager> {
 
     private void MaybeLoadMoreTiles() {
         float playerPosition = PlayerManager.Instance.PlayerController.transform.position.z;
-
         float playerPositionInLevel = playerPosition - LevelManager.Instance.GetLevelOffset();
         float maxPosition = playerPositionInLevel + MaxViewDistance;
         currentTile = (int)(playerPositionInLevel / currentLevel.TileSize);
@@ -90,7 +108,7 @@ public class TileManager : Singleton<TileManager> {
         levelsLoaded += 1;
         maxLoadedTile = maxLoadedTile + maxLoadedTileForLevel;
         levelOffset = (maxLoadedTile + 1) * level.TileSize;
-        Debug.Log($"Load Level {level.Name} with offset {levelOffset}. MaxLoadedTile {maxLoadedTile}");
+        // Debug.Log($"Load Level {level.Name} with offset {levelOffset}. MaxLoadedTile {maxLoadedTile}");
         currentTile = 0;
         currentLevel = level;
         maxLoadedTiles = (int)(MaxViewDistance / level.TileSize) + 3;

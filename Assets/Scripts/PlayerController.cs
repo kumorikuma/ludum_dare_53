@@ -68,9 +68,36 @@ public class PlayerController : MonoBehaviour {
     private Vector2 inputMoveVector;
     private bool inputJumpOnNextFrame = false;
     private Vector3 velocity;  // velocity relative to player: +x = right, +y = up, +z = forward
+    private bool isEnabled = true;
+    private float defaultSpeed;
+    private float acceleration;
+
+    // Debugging
+    public float Speed;
 
     public float GetPlayerSpeed() {
         return velocity.z;
+    }
+
+    public void SetAcceleration(float accel) {
+        acceleration = accel;
+    }
+
+    public void SetDefaultSpeed(float speed) {
+        defaultSpeed = speed;
+    }
+
+    public void ResetDefaultSpeed() {
+        defaultSpeed = DefaultSpeed;
+        acceleration = Acceleration;
+    }
+
+    public void SetToDefaultSpeed() {
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, DefaultSpeed);
+    }
+
+    public void SetSpeedToZero() {
+        rb.velocity = new Vector3(0, 0, 0);
     }
 
     // Continue on current path to ZPos.
@@ -86,13 +113,18 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Reset() {
-        transform.position = new Vector3(2, 0, 0);
+        transform.position = new Vector3(2, 0, 5);
+        ResetDefaultSpeed();
 
         BonusSpeed = 0f;
         DeliveryUnlocked = false;
         JumpUnlocked = false;
         SpeedUnlocked = false;
         HyperspeedUnlocked = false;
+    }
+
+    public void SetEnabled(bool isEnabled) {
+        this.isEnabled = isEnabled;
     }
 
     private void Awake() {
@@ -152,12 +184,15 @@ public class PlayerController : MonoBehaviour {
         // Accelerate / decelerate
         velocity = rb.velocity;
         if (inputMoveVector.y > 0.1) {
-            velocity.z += Acceleration * Time.fixedDeltaTime;
+            velocity.z += acceleration * Time.fixedDeltaTime;
         } else if (inputMoveVector.y < -0.1) {
-            velocity.z -= Acceleration * Time.fixedDeltaTime;
-        } else if (Mathf.Abs(velocity.z - DefaultSpeed) > 0.01) {
+            velocity.z -= acceleration * Time.fixedDeltaTime;
+        } else if (Mathf.Abs(velocity.z - defaultSpeed) > 0.01) {
             // Decay to default speed
-            velocity.z -= Mathf.Sign(velocity.z - DefaultSpeed) * Acceleration * Time.fixedDeltaTime;
+            velocity.z -= Mathf.Sign(velocity.z - defaultSpeed) * acceleration * Time.fixedDeltaTime;
+            if (velocity.z < defaultSpeed) {
+                velocity.z = defaultSpeed;
+            }
         }
 
         var upgradedMaxSpeed = MaxSpeed + BonusSpeed;
@@ -167,12 +202,15 @@ public class PlayerController : MonoBehaviour {
             upgradedMaxSpeed = 100;
         }
         velocity.z = Mathf.Clamp(velocity.z, MinSpeed, upgradedMaxSpeed);
+        Speed = velocity.z;
         SoundSystem.Instance.SetEngineLevel(velocity.z / MaxSpeed);
 
         // Move left / right
         if (inputMoveVector.x > 0.1) {
+            if (velocity.x < 0) { velocity.x = 0; }
             velocity.x += SideAcceleration * Time.fixedDeltaTime;
         } else if (inputMoveVector.x < -0.1) {
+            if (velocity.x > 0) { velocity.x = 0; }
             velocity.x -= SideAcceleration * Time.fixedDeltaTime;
         } else if (Mathf.Abs(velocity.x) > 0.01) {
             // Decay to 0

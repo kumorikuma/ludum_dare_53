@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TitleLevel
   m_EditorClassIdentifier: 
   Name: Vaporwave
-  LevelLengthMeters: 4000
+  LevelLengthMeters: 0
   OncomingTrafficLanes: 2
   FollowingTrafficLanes: 2
   ShouldSpawnCars: 0
@@ -25,6 +25,5 @@ MonoBehaviour:
   LevelTiles:
   - {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
   ExitTile: {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
-  StopTile: {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
   TransitionTile: {fileID: 3473162068231774562, guid: e8a373a80e6edf943b5cfeba840f8ca8, type: 3}
   DeliveryLocations: []

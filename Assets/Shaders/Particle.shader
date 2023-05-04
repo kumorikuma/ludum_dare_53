@@ -23,7 +23,6 @@ Shader "Unlit/Particle"
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-
             struct appdata
             {
                 float4 vertex : POSITION;
@@ -33,8 +32,6 @@ Shader "Unlit/Particle"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                float2 uv2 : TEXCOORD1;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
  

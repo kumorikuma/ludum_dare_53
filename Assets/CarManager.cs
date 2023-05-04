@@ -109,9 +109,17 @@ public class CarManager : Singleton<CarManager> {
         // Spawn Cars
         spawnCheckTimer += Time.fixedDeltaTime;
         // Stop spawning cars if player goes past the end of the level
-        if (spawnCheckTimer >= SpawnCheckIntervalS && playerXform.position.z < LevelManager.Instance.GetEndPosition()) {
+        float spawnCutoff = LevelManager.Instance.GetEndPosition() - OncomingTrafficSpawnDistance + 200;
+        bool isWithinLevel = playerXform.position.z < spawnCutoff;
+        if (spawnCheckTimer >= SpawnCheckIntervalS && isWithinLevel) {
             for (int lane = 0; lane < laneDirections.Count; lane++) {
                 int direction = laneDirections[lane];
+
+                // Disable spawning of traffic in following lanes since car cannot go slower than traffic
+                if (direction > 0) {
+                    continue;
+                }
+
                 float laneXPositionOffset = (laneDirections.Count - 1) * currentLevel.LaneSize / 2;
                 float laneXPosition = lane * currentLevel.LaneSize - laneXPositionOffset;
                 float laneYPosition;
@@ -139,8 +147,9 @@ public class CarManager : Singleton<CarManager> {
                     laneYPosition = playerXform.position.z - FollowingTrafficSpawnDistance;
                 }
 
-                float speed = DEFAULT_CRUISE_SPEED + Random.Range(-4.4704f, 4.4704f); // +/- 10mph
+                float speed = DEFAULT_CRUISE_SPEED;
                 SpawnCar(new Vector2(laneXPosition, laneYPosition), lane, speed * direction);
+                Debug.Log($"Spawn car at {laneYPosition}, in lane {lane}. Cutoff is {spawnCutoff}");
             }
             spawnCheckTimer = 0;
         }
@@ -165,6 +174,28 @@ public class CarManager : Singleton<CarManager> {
                 // Following Traffic
                 // If the traffic goes past a certain distance past the end of the level, then remove it
                 if (carObject.transform.position.z > LevelManager.Instance.GetEndPosition() + FollowingTrafficDespawnDistance) {
+                    DespawnCar(carObject);
+                }
+            }
+        }
+    }
+
+    public void DespawnFollowingCarsBehindPlayer() {
+        LevelData currentLevel = LevelManager.Instance.CurrentLevel;
+        List<int> laneDirections = currentLevel.GetLaneDirections();
+        Transform playerXform = PlayerManager.Instance.CameraController.transform;
+        for (int i = 0; i < cars.Count; i++) {
+            if (cars[i].isFree) {
+                // Ignore if it's already freed
+                continue;
+            }
+
+            int direction = laneDirections[cars[i].lane];
+            GameObject carObject = cars[i].gameObject;
+            if (direction < 0) {
+                continue;
+            } else {
+                if (carObject.transform.position.z < playerXform.position.z) {
                     DespawnCar(carObject);
                 }
             }
@@ -258,22 +289,26 @@ public class CarManager : Singleton<CarManager> {
 
     void SpawnInitialCars(LevelData level) {
         float defaultGridLength = DEFAULT_CRUISE_SPEED * SpawnCheckIntervalS;
-        int numCars = (int)((level.GetLevelLengthMeters() + OncomingTrafficSpawnDistance) / defaultGridLength);
+        int numCars = (int)((level.GetLevelLengthMeters()) / defaultGridLength);
         List<int> laneDirections = level.GetLaneDirections();
 
         float laneXPositionOffset = (laneDirections.Count - 1) * level.LaneSize / 2;
         for (int i = 0; i < laneDirections.Count; i++) {
             float laneXPosition = i * level.LaneSize - laneXPositionOffset;
             // TODO: More complex spawning logic, for now, just random uniform distribution
+            int carsSpawned = 0;
             for (int carIdx = 0; carIdx < numCars; carIdx++) {
                 float randomValue = (float)random.NextDouble();
                 float carSpawnProbability = laneDirections[i] < 0 ? carSpawnProbabilityOncoming : carSpawnProbabilityFollowing;
                 if (randomValue <= carSpawnProbability) {
                     float laneYPosition = carIdx * defaultGridLength + LevelManager.Instance.GetLevelOffset();
-                    float speed = DEFAULT_CRUISE_SPEED + Random.Range(-4.4704f, 4.4704f); // +/- 10mph
+                    // float speed = DEFAULT_CRUISE_SPEED + Random.Range(-4.4704f, 4.4704f); // +/- 10mph
+                    float speed = DEFAULT_CRUISE_SPEED;
                     CarManager.Instance.SpawnCar(new Vector2(laneXPosition, laneYPosition), i, speed * laneDirections[i]);
+                    carsSpawned++;
                 }
             }
+            Debug.Log($"{carsSpawned} cars spawned for lane {i}");
         }
         spawnCheckTimer = 0;
     }

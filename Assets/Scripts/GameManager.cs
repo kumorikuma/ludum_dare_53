@@ -31,6 +31,11 @@ public class GameManager : Singleton<GameManager> {
     private float levelStartPosition = 0f;
     private float distanceTravelledThisLevel = 0f;
 
+    // Debugging
+    public float DistanceTravelled_;
+    public float DistanceTravelledThisLevel_;
+    public float TotalDistance_;
+
     // Others
     Material cameraMat;
 
@@ -38,7 +43,6 @@ public class GameManager : Singleton<GameManager> {
         cameraMat = PlayerManager.Instance.CameraController.GetComponentInChildren<MeshRenderer>().material;
 
         ResetGame();
-        // StartLevel();
 
         if (DEVELOPMENT_MODE) {
             PlayerManager.Instance.PlayerController.DeliveryUnlocked = true;
@@ -64,6 +68,13 @@ public class GameManager : Singleton<GameManager> {
 
         if (playerPosition > LevelManager.Instance.GetEndPosition()) {
             Debug.Log($"Finished Level: {playerPosition} > {LevelManager.Instance.GetEndPosition()}");
+            if (LevelManager.Instance.CurrentLevel.name == "Last Level") {
+                PlayerManager.Instance.PlayerController.SetAcceleration(200);
+                PlayerManager.Instance.PlayerController.SetDefaultSpeed(0);
+                CarManager.Instance.DespawnFollowingCarsBehindPlayer();
+            } else {
+                PlayerManager.Instance.PlayerController.SetToDefaultSpeed();
+            }
             FinishLevel();
         }
 
@@ -71,6 +82,10 @@ public class GameManager : Singleton<GameManager> {
         var actualLevelLength = (LevelManager.Instance.GetEndPosition() - levelStartPosition);
         var actualDistanceTravelled = playerPosition - levelStartPosition;
         distanceTravelledThisLevel = actualDistanceTravelled / actualLevelLength * LevelManager.Instance.CurrentLevel.GetLevelLengthMeters();
+
+        DistanceTravelled_ = distanceTravelled;
+        DistanceTravelledThisLevel_ = distanceTravelledThisLevel;
+        TotalDistance_ = totalDistance;
 
         UpdateSunset();
         UpdateHud();
@@ -86,14 +101,13 @@ public class GameManager : Singleton<GameManager> {
         levelIndex = level;
         levelStartTime = Time.time;
         damages = 0;
+        // deliveries = 0;
         levelStartPosition = PlayerManager.Instance.PlayerController.transform.position.z;
+        distanceTravelled = 0f;
         distanceTravelledThisLevel = 0f;
 
         LevelManager.Instance.LoadLevel(levelIndex);
         Debug.Log($"Level Start!");
-
-        // ??
-        // playerController.Reset();
 
         MenuSystem.Instance.UnpauseGame();
     }
@@ -108,17 +122,7 @@ public class GameManager : Singleton<GameManager> {
         var timespan = TimeSpan.FromSeconds(levelFinishTime - levelStartTime);
         Debug.Log($"Level Finished! Time {timespan.ToString(@"hh\:mm\:ss")}");
 
-        // if (LevelManager.Instance.CurrentLevel.name == "Last Level") {
-        //     FinishLevel();
-        //     Debug.Log($"End game!!");
-        //     AdvanceGameProgress();
-        // }
         AdvanceGameProgress();
-        // TODO: Get time limit and delivery goal from LevelData
-        // var earnings = ComputeEarnings();
-        // money += earnings;
-
-        // Take away control from the user
     }
 
     public void AdvanceGameProgress() {
@@ -178,18 +182,23 @@ public class GameManager : Singleton<GameManager> {
                 break;
             case 10:
                 // Score screen
+                PlayerManager.Instance.PlayerController.ResetDefaultSpeed();
                 MenuSystem.Instance.ShowLevelEnd(levelIndex, timeRemaining, 0, damages, deliveries, 0, money);
                 break;
         }
     }
 
     public void ResetGame() {
-        SoundSystem.Instance.SetVolume(1.0f);
+        SoundSystem.Instance.SetVolume(0.5f);
         gameProgress = 0;
         timeRemaining = TOTAL_TIME;
         totalDistance = LevelManager.Instance.GetTotalDistance();
         playerController.Reset();
+        TileManager.Instance.Reset();
         ShowTitle();
+
+        UpdateSunset();
+        UpdateHud();
     }
 
     public void ScoreCollision(float collisionSpeed) {
