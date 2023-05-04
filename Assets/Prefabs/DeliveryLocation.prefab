@@ -295,7 +295,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8643208652927126812}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: 419911a0c849b03499bace2d578e85ac, type: 2}
 --- !u!23 &4734466511072604248
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -316,7 +316,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 10265201ffa2b1244becf9329b0f0a6c, type: 2}
+  - {fileID: 2100000, guid: ca90ae6d1a7324348994bfcd5a1a9c31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -417,7 +417,11 @@ PrefabInstance:
     - target: {fileID: -7635826562936255635, guid: a3085870d23c2274b82bf5fa6634d199, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0df286efdc6681a4d9a75e8eea9d92f5, type: 2}
+      objectReference: {fileID: 2100000, guid: 4cb8681996405c544a9e155ffca4c29a, type: 2}
+    - target: {fileID: -6400281290468069383, guid: a3085870d23c2274b82bf5fa6634d199, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -2432090755550338912, guid: 0bd173ce86ae97d46afd582bc0b11ffc, type: 3}
     - target: {fileID: 919132149155446097, guid: a3085870d23c2274b82bf5fa6634d199, type: 3}
       propertyPath: m_Name
       value: basic_pyramid

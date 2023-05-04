@@ -37,6 +37,9 @@ public class MeshEditingWindow : EditorWindow {
         if (GUILayout.Button("Recompute Normals")) {
             this.StartCoroutine(RecalculateNormals(SourceMesh));
         }
+        if (GUILayout.Button("Add barycentric coords to verts")) {
+            this.StartCoroutine(GenerateBarycentricCoordinates(SourceMesh));
+        }
         GUILayout.EndVertical();
         GUILayout.EndVertical();
 
@@ -55,6 +58,66 @@ public class MeshEditingWindow : EditorWindow {
 
     IEnumerator RecalculateNormals(MeshFilter sourceMesh) {
         sourceMesh.sharedMesh.RecalculateNormals();
+        yield return null;
+    }
+
+    // For each triangle, generates duplicates vertices that have barycentric coordinates set
+    // as vertex attributes for interpolation in shader.
+    IEnumerator GenerateBarycentricCoordinates(MeshFilter sourceMesh) {
+        Vector3[] sourceVerts = sourceMesh.sharedMesh.vertices;
+        Vector2[] sourceUvs = sourceMesh.sharedMesh.uv;
+        int[] sourceTriangles = sourceMesh.sharedMesh.triangles;
+
+        Debug.Log($"UVS {sourceUvs.Length}");
+        Debug.Log($"Verts {sourceVerts.Length}");
+
+        Vector3[] newVerts = new Vector3[sourceVerts.Length * 3];
+        Vector3[] newUvs = new Vector3[sourceVerts.Length * 3];
+        Vector3[] barycentricCoordinates = new Vector3[sourceVerts.Length * 3];
+        int[] newTriangles = new int[sourceTriangles.Length];
+
+        int vertIdx = 0;
+        int triIdx = 0;
+        // For each triangle, generate three vertices
+        for (int i = 0; i < sourceTriangles.Length; i += 3) {
+            int vertA = sourceTriangles[i];
+            int vertB = sourceTriangles[i + 1];
+            int vertC = sourceTriangles[i + 2];
+
+            newTriangles[triIdx++] = vertIdx;
+            newVerts[vertIdx] = sourceVerts[vertA];
+            if (sourceUvs.Length > 0) {
+                newUvs[vertIdx] = sourceUvs[vertA];
+            }
+            barycentricCoordinates[vertIdx] = new Vector3(1, 0, 0);
+            vertIdx++;
+
+            newTriangles[triIdx++] = vertIdx;
+            newVerts[vertIdx] = sourceVerts[vertB];
+            if (sourceUvs.Length > 0) {
+                newUvs[vertIdx] = sourceUvs[vertB];
+            }
+            barycentricCoordinates[vertIdx] = new Vector3(0, 1, 0);
+            vertIdx++;
+
+            newTriangles[triIdx++] = vertIdx;
+            newVerts[vertIdx] = sourceVerts[vertC];
+            if (sourceUvs.Length > 0) {
+                newUvs[vertIdx] = sourceUvs[vertC];
+            }
+            barycentricCoordinates[vertIdx] = new Vector3(0, 0, 1);
+            vertIdx++;
+        }
+
+        sourceMesh.sharedMesh.vertices = newVerts;
+        if (sourceUvs.Length > 0) {
+            sourceMesh.sharedMesh.SetUVs(0, newUvs);
+        }
+        sourceMesh.sharedMesh.SetUVs(1, barycentricCoordinates);
+        sourceMesh.sharedMesh.triangles = newTriangles;
+        sourceMesh.sharedMesh.RecalculateNormals();
+        sourceMesh.sharedMesh.RecalculateBounds();
+
         yield return null;
     }
 

@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 4503953162388995682}
   - component: {fileID: 4503953162388995709}
   m_Layer: 0
-  m_Name: Left 1
+  m_Name: Tail Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
