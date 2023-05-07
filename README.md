@@ -16,24 +16,25 @@
 7. Test UI by going into play mode and on the **Services/ReactUnity** game object, change the **Debug Route** on the **UI Router** script.
 
 Documentation: https://reactunity.github.io/
+
 Repo: https://github.com/ReactUnity/core
 
 # Helpful Links
 
-Unity Input System: https://docs.unity3d.com/Packages/com.unity.inputsystem@1.5/manual/index.html 
-Unity Post Processing: https://docs.unity3d.com/Packages/com.unity.postprocessing@3.2/manual/Quick-start.html 
-"Skyplane" Shader: https://aras-p.info/blog/2019/02/01/Infinite-sky-shader-for-Unity/ 
-Rendering Grids: https://gamedev.stackexchange.com/questions/182263/infinite-world-floor-grid-shader 
-Computing Vertex Normals from Heightmap: https://forum.unity.com/threads/calculate-vertex-normals-in-shader-from-heightmap.169871/ 
-HDR Bloom: https://gamedev.stackexchange.com/questions/137659/unity-how-to-apply-bloom-to-only-some-objects-in-the-scene 
-sRGB vs Linear: https://forum.unity.com/threads/understanding-srgb-and-gamma-corrected-values-in-the-render-pipeline.783224/ 
+- Unity Input System: https://docs.unity3d.com/Packages/com.unity.inputsystem@1.5/manual/index.html 
+- Unity Post Processing: https://docs.unity3d.com/Packages/com.unity.postprocessing@3.2/manual/Quick-start.html 
+- "Skyplane" Shader: https://aras-p.info/blog/2019/02/01/Infinite-sky-shader-for-Unity/ 
+- Rendering Grids: https://gamedev.stackexchange.com/questions/182263/infinite-world-floor-grid-shader 
+- Computing Vertex Normals from Heightmap: https://forum.unity.com/threads/calculate-vertex-normals-in-shader-from-heightmap.169871/ 
+- HDR Bloom: https://gamedev.stackexchange.com/questions/137659/unity-how-to-apply-bloom-to-only-some-objects-in-the-scene 
+- sRGB vs Linear: https://forum.unity.com/threads/understanding-srgb-and-gamma-corrected-values-in-the-render-pipeline.783224/ 
 
 ### Fonts
 
-Can input some text and see different fonts render them: https://fonts.google.com/?preview.text=Handler&preview.text_type=custom
-Vaporwave Text Generator: https://lingojam.com/VaporwaveTextGenerator 
-Show unicode characters in text: https://qaz.wtf/u/show.cgi?show=Handler&type=string 
-Unicode Characters for Japanese: https://stackoverflow.com/questions/19899554/unicode-range-for-japanese 
+- Can input some text and see different fonts render them: https://fonts.google.com/?preview.text=Handler&preview.text_type=custom
+- Vaporwave Text Generator: https://lingojam.com/VaporwaveTextGenerator 
+- Show unicode characters in text: https://qaz.wtf/u/show.cgi?show=Handler&type=string 
+- Unicode Characters for Japanese: https://stackoverflow.com/questions/19899554/unicode-range-for-japanese 
 
 # References
 
