@@ -14,6 +14,7 @@
 5. Open **React/Quick Start** window inside Unity, and install dependencies
 6. **When developing:** Run **npm start** inside **/react** folder
 7. Test UI by going into play mode and on the **Services/ReactUnity** game object, change the **Debug Route** on the **UI Router** script.
+8. **When building:** Run **npm run build** inside **/react** folder and copy built assets to **Resources/react**
 
 Documentation: https://reactunity.github.io/
 
